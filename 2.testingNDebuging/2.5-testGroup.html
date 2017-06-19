@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>테스트 그룹 구현</title>
+    <script type="text/javascript">
+        (function () {
+            var results;
+
+            this.assert = function assert (value, desc) {
+                var li = document.createElement('li');
+                li.className = value ? 'pass' : 'fail';
+                li.appendChild(document.createTextNode(desc));
+                results.appendChild(li);
+
+                // 각 검증에서는 해당 검증을 감싸고 있는 테스트그룹의 상태를 변경한다.
+                // 그룹 하위에 하나라도 실패한 테스트가 있으면 해당 그룹을 실패라고 설정한다.
+                if (!value) {
+                    li.parentNode.parentNode.className = 'fail';
+                }
+                return li;
+            }
+
+            this.test = function test (name, fn) {
+                results = document.getElementById('results');
+                // 테스트 그룹의 기본 값을 성공으로 설정하고,
+
+                // 각 테스트 그룹은 ul 엘리먼트 하위에 추가한 ul 엘리먼트로 그룹핑된다.
+                results = assert(true, name).appendChild(document.createElement('ul'));
+
+                // 아래서 전달한 3개의 검증을 실행하는 익명 함수를 실행한다.
+                fn();
+            }
+        })();
+
+        window.onload = function () {
+            test("A test.", function () { // test 함수로 3개의 검증을 실행하는 익명함수를 전달한다.
+                // 여기서는 전부 true로 해서 테스트 그룹을 성공으로 만들었지만,
+                assert(true, "First assertion completed.");
+                assert(true, "Second assertion completed.");
+                assert(true, "Third assertion completed.");
+            });
+
+            test("Another test.", function () {
+                // 이 테스트 그룹에서는 고의로 하나를 실패로 처리해서 전부 실패로 출력하도록 한다.
+                assert(true, "First test completed.");
+                assert(false, "Second test failed.");
+                assert(true, "Third test completed.");
+            });
+        }
+    </script>
+    <style>
+        #results li.pass {color: green}
+        #results li.fail {color: red}
+    </style>
+</head>
+<body>
+<ul id="results"></ul>
+</body>
+</html>
