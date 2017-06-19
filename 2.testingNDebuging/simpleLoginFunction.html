@@ -6,11 +6,14 @@
     <script type="text/javascript">
         function log() {
             try {
+                // 대부분의 브라우저에서 동작하는 로깅 함수
                 console.log.apply(console, arguments);
             } catch (e) {
                 try {
+                    // 위 함수가 없으면 오페라 전용 함수로 로깅
                     opera.postError.apply(opera, arguments);
                 } catch (e) {
+                    // 둘 다 없으면 기존 방식처럼 alert를 이용해서 처리
                     alert(Array.prototype.join.call(arguments, " "));
                 }
             }
