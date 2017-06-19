@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>최근의 모든 브라우저에서 동작하는 간단한 로깅 함수</title>
+    <script type="text/javascript">
+        function log() {
+            try {
+                console.log.apply(console, arguments);
+            } catch (e) {
+                try {
+                    opera.postError.apply(opera, arguments);
+                } catch (e) {
+                    alert(Array.prototype.join.call(arguments, " "));
+                }
+            }
+        }
+
+        window.onload = function () {
+            log("hello world!");
+        }
+    </script>
+</head>
+<body>
+
+</body>
+</html>
