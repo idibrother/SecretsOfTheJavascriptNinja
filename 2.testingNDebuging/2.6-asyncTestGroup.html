@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>간단한 비동기 테스트 스위트</title>
+    <script type="text/javascript">
+        (function () {
+            var queue = [], paused = false, results;
+            this.test = function (name, fn) {
+                console.log("############## 1, 6 ##############");
+                queue.push(function () {
+                    console.log("############## 3, 10 ##############");
+                    results = document.getElementById("results");
+                    // 요기를 또 빼먹었다.
+                    results = assert(true, name).appendChild(document.createElement("ul"));
+
+                    fn();
+                });
+
+                runTest();
+            };
+
+            this.pause = function () {
+                paused = true;
+            };
+
+            this.resume = function () {
+                paused = false;
+                setTimeout(runTest, 1);
+            };
+
+            function runTest() {
+                console.log("############## 2, 7, 9, 15 ##############");
+                if (!paused && queue.length) {
+                    var f = queue.shift();
+                    f();
+                }
+            }
+
+            this.assert = function assert(value, desc) {
+                console.log("############## 4, 8, 11, 14 ##############");
+                var li = document.createElement("li");
+                li.className = value ? "pass" : "fail";
+                li.appendChild(document.createTextNode(desc));
+                results.appendChild(li);
+
+                if (!value) {
+                    var lisParent = li.parentNode;
+                    var lisParentParent = lisParent.parentNode;
+                    lisParentParent.className = "fail";
+                }
+
+                return li;
+            };
+        })();
+
+        window.onload = function () {
+
+            // ############## begin ##############
+            test("Async Test #1", function () {
+                console.log("############## 5 ##############");
+                pause();
+                setTimeout(function () {
+                    assert(true, "First Test completed!");
+                    resume();
+                }, 1000);
+            });
+
+            test("Async Test #2", function () {
+                console.log("############## 12 ##############");
+                pause();
+
+                setTimeout(function () {
+                    assert(true, "Second Test completed!");
+                    resume();
+                }, 1000);
+                console.log("############## 13 ##############");
+
+            });
+            // ############## end ##############
+        };
+    </script>
+    <style>
+        #results li.pass{color: green}
+        #results li.fail{color: red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
