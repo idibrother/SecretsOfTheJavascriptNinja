@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>함수 선언과 관련한 내용들 증명하기</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            // 뭔가 최신 브라우저에서는 많은것이 달라졌나봄!!!
+            // 최상위 객체인 window의 프로퍼티로 추가되는 함수
+            function isNimble () {
+                return true;
+            }
+
+            // 확인
+            assert(typeof isNimble === "function", "isNimble() 정의됨.");
+
+            // 익스플로러에서는 name 프로퍼티를 안가지고 있나봄
+            assert(isNimble.name === "isNimble", "isNimble()에는 이름이 있음.");
+
+            // 익명함수를 canFly 전역변수로 할당
+            var canFly = function () {
+                return true;
+            }
+
+            // 확인
+            assert(typeof canFly === "function", "canFly()는 정의됨.");
+            assert(canFly.name === "canFly", "canFly()에는 이름이 있음");
+            // 크롬에서는 함수를 참조하는 변수명을 함수의 이름으로 할당하는듯
+            console.log(canFly.name);
+
+            // 익명함수를 전역변수에 할당
+            window.isDeadly = function () {
+                return true;
+            }
+
+            // 확인. 사실 해당 경우는 window를 붙이지 않아도 window의 프로퍼티로 할당됨
+            assert(typeof window.isDeadly === "function", "isDeadly() 정의됨");
+
+            function outer() {
+                // 확인
+                assert(typeof inner === "function", "inner 함수가 정의된 위치 앞쪽에서 inner()는 유효함.");
+                // 함수는 정의된 위치 앞뒤에서 유효함
+                function inner() {};
+                // 확인
+                assert(typeof inner === "function", "inner 함수가 정의된 위치 뒤쪽에서 inner()는 유효함");
+
+                // 유효범위는 함수에 의해 결정됨
+                assert(window.inner === undefined, "전역 유효범위에 inner()는 없음");
+                console.log(typeof window.inner);
+            }
+
+            // 이것은 전역범위에서 유효하지만
+            outer();
+
+            // inner는 전역범위에서 유효하지 않음
+            assert(window.inner === undefined, "inner()는 전역 유효범위에 없음.");
+
+            // name 프로퍼티는 함수를 참조하는 변수명과는 무관함
+            window.wieldsSword = function swingsSword () {
+                return true;
+            }
+
+            assert(window.wieldsSword.name === "swingsSword", "wieldSword의 실제 이름은 swingsSword이다..");
+
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+
+</body>
+</html>
