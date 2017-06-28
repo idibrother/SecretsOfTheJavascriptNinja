@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>객체 내에서 메서드 재귀 호출</title>
+    <script type="text/javascript">
+        window.onload = function  () {
+            assert(ninja.chirp(3) === "chirp-chirp-chirp", "메서드를 사용하는 것도 이해하기 쉽다.");
+            // 하지만...
+        }
+
+        var ninja = {
+            chirp : function (n) {
+                // 매개변수를 -1씩 제하면서 재귀적으로 호출하고 있다.
+                // 매개변수가 1인 경우까지 재귀 호출을 하고, 재귀 호출된 횟수만큼 -chirp를 덧붙인다..
+                return n > 1 ? ninja.chirp(n - 1)  + "-chirp" : "chirp";
+            }
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
