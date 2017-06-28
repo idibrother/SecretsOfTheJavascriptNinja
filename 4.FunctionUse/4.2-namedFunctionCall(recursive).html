@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>이름을 가진 함수를 이용해서 소리내기</title>
+    <script type="text/javascript">
+        window.onload = function  () {
+            assert(chirp(3) === "chirp-chirp-chirp", "이름을 가진 함수를 호출하는 것은 자연스럽다.");
+        }
+
+        function chirp(n) {
+            // 매개변수를 -1씩 제하면서 재귀적으로 호출하고 있다.
+            // 매개변수가 1인 경우까지 재귀 호출을 하고, 재귀 호출된 횟수만큼 -chirp를 덧붙인다..
+            return n > 1 ? chirp(n - 1)  + "-chirp" : "chirp";
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
