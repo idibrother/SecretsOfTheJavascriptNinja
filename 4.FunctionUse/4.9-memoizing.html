@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>이전에 계산한 값을 기억하기</title>
+    <script type="text/javascript">
+        function isPrime (value) {
+            // isPrime 함수의 answers 프로퍼티가 없을 경우 객체를 참조하게 한다.
+            if (!isPrime.answers) {
+                isPrime.answers = {};
+            }
+
+            // isPrime 함수의 answers 프로퍼티의 value 번 째에 값이 있으면 그 것을 리턴하고,
+            if (isPrime.answers[value] != null) {
+                return isPrime.answers[value];
+            }
+
+            // 없을 경우 소수 여부를 연산해서 answers 프로퍼티의 value 번 째에 할당 후 리턴한다.
+            var prime = value != 1 ; // 1은 소수가 될 수 없다.
+
+            for (var i = 2; i < value; i++) {
+                if (value % i == 0) {
+                    prime = false;
+                    break;
+                }
+            }
+
+            return isPrime.answers[value] = prime;
+        }
+
+        window.onload = function  () {
+            assert(isPrime(5), "5는 소수다.");
+            assert(isPrime.answers[5], "캐시에 저장된 값이 리턴되었다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
