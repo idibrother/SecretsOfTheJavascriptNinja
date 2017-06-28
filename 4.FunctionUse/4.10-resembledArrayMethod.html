@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>배열과 유사한 메서드 시뮬레이션</title>
+    <script type="text/javascript">
+        var elems = {
+            length : 0,
+
+            add: function(elem) {
+                // 배열 객체의 push 함수를 사용 할 때 elems 객체를 push 함수의 컨텍스트로 지정했기 때문에
+                // push 함수는 elems를 배열 객체로 알고 해당 객체에 있는 length 프로퍼티 값을 1 증가시킨다.
+                Array.prototype.push.call(this, elem);
+            },
+
+            // 보통은 DOM 객체에 대한 참조보다는 다른 방식으로 엘리먼트 참조가 좋다고 한다. 그렇다니 그러려니 하자. 이유는 차차 알아질까? ㅎ
+            gather: function (id) {
+                this.add(document.getElementById(id));
+            }
+        };
+
+        window.onload = function  () {
+            elems.gather("first");
+            assert(elems.length == 1 && elems[0].nodeType, "수집한 엘리먼트가 저장되었는지 확인한다.");
+
+            elems.gather("second");
+            assert(elems.length == 2 && elems[1].nodeType, "추가로 수집한 엘리먼트가 저장되어 있는지 확인한다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+<input id="first"/>
+<input id="second"/>
+</body>
+</html>
