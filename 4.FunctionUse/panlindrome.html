@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>팬린드롬 문자열</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            assert(isPanlindrome("abccba"), "abccba는 팬린드롬이다.");
+
+            assert(isPanlindrome("abccb") == false, "abccb는 팬린드롬이 아니다.");
+        }
+
+        function isPanlindrome(text) {
+            // 문자가 1개 또는 0개인 경우 팬린드롬임.
+            if (text.length <= 1) {
+                return true;
+            }
+
+            // 처음 문자와 마지막 문자가 다르면 팬린드롬이 아님.
+            if (text.charAt(0) != text.charAt(text.length - 1)) {
+                return false;
+            }
+
+            // 첫 문자와 마지막 문자를 제거하고 isPanlindrome 함수에 인자로 전달해서 문자가 0개 또는 1개 일 때 까지 재귀적으로 호출된다.
+            return isPanlindrome(text.substr(1, text.length - 2));
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
