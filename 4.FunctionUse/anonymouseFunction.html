@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>익명함수를 이용하는 일반적인 예제</title>
+    <script type="text/javascript">
+        // window.onload 프로퍼티에 함수를 할당하는 용도
+        window.onload = function () {
+            assert(true, "power!");
+
+            // 객체에 함수를 할당하는 용도
+            var ninja = {
+                shout: function () {
+                    assert(true, "Ninja!");
+                }
+            };
+
+            ninja.shout();
+
+            // 타이머 함수에 콜백으로 전달하는 용도
+            setTimeout(function () {
+                assert(true, "Forever!");
+            }, 1000);
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results"></ul>
+</body>
+</html>
