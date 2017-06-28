@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>현재 호출된 함수를 참조하기 위해서 arguments.callee 프로퍼티 활용하기</title>
+    <script type="text/javascript">
+        window.onload = function  () {
+            var ninja = {
+                // 이렇게 하면 역시 함수 자체에 대한 참조가 있으므로 앞전에 있었던 함수에 대한 참조가 사라지는 이슈는 없을 것이다.
+                chirp : function (n) {
+                    return n > 1 ? arguments.callee(n - 1) + "-chirp" : "chirp";
+                }
+            };
+
+            assert(ninja.chirp(3) == "chirp-chirp-chirp", "arguments.callee는 함수 자신을 가리킨다.");
+
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
