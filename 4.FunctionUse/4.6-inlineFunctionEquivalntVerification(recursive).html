@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>인라인 함수의 동일성 검증하기</title>
+    <script type="text/javascript">
+        window.onload = function  () {
+            var ninja = function myNinja() {
+                assert(ninja == myNinja, "이 함수는 동시에 두 가지 이름을 가지고 있다.")
+            }
+
+            ninja();
+
+            // 인라인 함수의 이름은 그 함수 내부에서만 유효하다고 한다.(참조범위와는 다른 개념인듯)
+            assert(typeof myNinja == "undefined", "myNinja는 해당 인라인 함수의 외부에서 사용 할 수 없다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
