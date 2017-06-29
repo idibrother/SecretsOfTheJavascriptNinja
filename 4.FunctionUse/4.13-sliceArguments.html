@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>인자 목록 잘라내기</title>
+    <script type="text/javascript">
+
+        function multiMax (multi) {
+            // apply 함수를 써서 Math.max가 배열을 인자로 받아서 연산하도록 하고,
+            // Array 객체의 slice 함수를 사용하여 1번 째 인자를 제외한 나머지 인자 목록을 구해서 max 함수에 전달한다.
+            // 하지만...
+            // arguments는 배열과 유사하지만 배열은 아니다. 그래서!
+            // 이 전에 함수 특성 설명 부분에서 나왔던 Array 객체를 속여서 arguments가 배열인 것처럼 동작하게 만들자.
+            // arguments 매개변수는 length 프로퍼티를 가지고 있으므로 이것을 slice 함수의 컨텍스트로 하고 매개변수 1을 전달하면
+            // slice 함수는 arguments의 length 프로퍼티를 활용해서 1번 째를 제외한 나머지 목록을 배열로 리턴한다.
+            // 그래서 아래의 코드는 정상 동작한다.
+            return multi * Math.max.apply(Math, Array.prototype.slice.call(arguments, 1));
+        }
+
+        window.onload = function  () {
+            assert(multiMax(1, 2, 3, 4, 5) == 5, "1번 째 값과 나머지 중 가장 큰 값의 곱을 계산 할 수 있다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
