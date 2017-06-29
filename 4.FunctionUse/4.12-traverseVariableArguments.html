@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>가변인자 목록 순회하기</title>
+    <script type="text/javascript">
+
+        function merge(root) {
+            // 이 함수 안에서는 root 매개변수만 이름으로 참조가 가능하다. 그리고
+            for (var i = 1; i < arguments.length; i++) {
+                // 0번은 root이므로 제외하고, i(>1)번째 매개변수를 arguments 매개변수를 통해 참조해서
+                // root에 프로퍼티와 프로퍼티 값을 추가하고 리턴한다.
+                // i 번째 매개변수가 프로퍼티가 여러개면 그것도 같이 추가한다. 함 보까?
+                for (var key in arguments[i]) {
+                    root[key] = arguments[i][key];
+                }
+            }
+            return root;
+        }
+
+        var merged = merge (
+            {name : "Batou"},
+            // 아래 city가 1번 째 인자이므로 위 함수에서는 name 프로퍼티는 그대로 두고
+            // city 부터 이후의 인자를 첫 번 째 인자에 추가해서 리턴 할 것이다.
+            {city : "Niihama",
+            address: "Seoul"}
+        );
+
+        window.onload = function  () {
+            assert(merged.name == "Batou", "원래 있던 name 프로퍼티는 변하지 않는다.");
+            assert(merged.city == "Niihama", "city 프로퍼티가 추가된다.");
+            assert(merged.address == "Seoul", "두 번 째 인자의 모든 프로퍼티는 첫 번 째 인자의 프로퍼티에 추가되었다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
