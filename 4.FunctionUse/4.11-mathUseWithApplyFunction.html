@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>배열과 유사한 메서드 시뮬레이션</title>
+    <script type="text/javascript">
+
+        function smallest(array) {
+            // 본래 Math.min 함수는 배열을 인자로 받지 않는다.
+            // apply() 함수가 배열을 인자로 받으므로 이를 활용한다.
+            return Math.min.apply(Math, array);
+        }
+
+        function largest(array) {
+            return Math.max.apply(Math, array);
+        }
+
+        window.onload = function  () {
+            assert(smallest([0, 1, 2, 3]) == 0, "최소값의 위치를 찾았다.");
+            assert(largest([0, 1, 2, 3]) == 3, "최대값의 위치를 찾았다.");
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
