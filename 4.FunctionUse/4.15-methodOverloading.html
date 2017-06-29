@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>메서드 오버로딩을 처리하는 함수</title>
+    <script type="text/javascript">
+        // object는 오버로드된 메서드를 적용할 객체
+        // name은 그 메서드를 참조 할 변수
+        // fn은 오버로드된 메서드
+        function addMethod (object, name, fn) {
+            var old = object[name];
+            // object의 name 프로퍼티가 익명 함수를 참조하는데
+            // 이 때 익명 함수의 클로저에는 호출 시점의 object, name, fn, old변수를 참조 할 수 있다.
+            object[name] = function () {
+                // 가장 마지막에 추가된 fn의 length가 2이고, d아래서 호출 할 때 1개만 전달 했기 때문에
+                if (fn.length == arguments.length) {
+                    return fn.apply(this, arguments);
+                } else {
+                    // old 함수가 호출되고, arguments를 인자로 전달한다.
+                    // 이 시점의 old는 매개변수가 한 개인 함수이다. 왜냐면 클로저 기능이 있기 때문이다.
+                    // 가장 마지막에 추가된 함수를 기준으로 매개변수의 길이와 이름을 가진 매개변수의 갯수를 비교해서
+                    // 클로저에 있는 old를 호출 할 지, 본인의 함수를 호출할지 결정한다.
+                    // 함수형 언어의 특징 상 정의를 해놓고, 호출하는 시점에 결정이 난다.
+                    // 매개변수 비교를 끝까지 했는데도 조건에 만족하는 함수가 안나오면 아무것도 하지 않는다.
+                    return old.apply(this, arguments);
+                }
+            };
+        }
+
+        window.onload = function  () {
+            var ninja = {};
+            // 아래 메서드를 차례대로 호출 하면
+            // 마지막 호출 할 때
+            // 아래 3개의 메서드를 호출 하면 무언가 셋팅만 한다.
+            addMethod(ninja, 'whatever', function () {
+                // 무언가 한다.
+                });
+            addMethod(ninja, 'whatever', function (a) {
+                // 무언가 한다.
+                });
+            addMethod(ninja, 'whatever', function (a, b) {
+                // 무언가 한다.
+                });
+
+            // 실제 호출 시점에 어떤 함수가 호출 될지 결정이 난다. 보자!
+            ninja.whatever(1);
+
+
+        }
+
+        function assert(value, desc) {
+            var li = document.createElement('li');
+            li.className = value ? 'pass' : 'fail';
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById('results').appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+
+<ul id="results"></ul>
+</body>
+</html>
