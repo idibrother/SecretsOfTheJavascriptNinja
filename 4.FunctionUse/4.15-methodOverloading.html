@@ -15,7 +15,7 @@
                 // 가장 마지막에 추가된 fn의 length가 2이고, d아래서 호출 할 때 1개만 전달 했기 때문에
                 if (fn.length == arguments.length) {
                     return fn.apply(this, arguments);
-                } else {
+                } else if (typeof old == "function") {
                     // old 함수가 호출되고, arguments를 인자로 전달한다.
                     // 이 시점의 old는 매개변수가 한 개인 함수이다. 왜냐면 클로저 기능이 있기 때문이다.
                     // 가장 마지막에 추가된 함수를 기준으로 매개변수의 길이와 이름을 가진 매개변수의 갯수를 비교해서
@@ -34,6 +34,7 @@
             // 아래 3개의 메서드를 호출 하면 무언가 셋팅만 한다.
             addMethod(ninja, 'whatever', function () {
                 // 무언가 한다.
+                console.log("foo");
                 });
             addMethod(ninja, 'whatever', function (a) {
                 // 무언가 한다.
@@ -43,7 +44,7 @@
                 });
 
             // 실제 호출 시점에 어떤 함수가 호출 될지 결정이 난다. 보자!
-            ninja.whatever(1);
+            ninja.whatever();
 
 
         }

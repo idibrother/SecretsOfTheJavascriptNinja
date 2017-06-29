@@ -15,6 +15,7 @@
             // slice 함수는 arguments의 length 프로퍼티를 활용해서 1번 째를 제외한 나머지 목록을 배열로 리턴한다.
             // 그래서 아래의 코드는 정상 동작한다.
             return multi * Math.max.apply(Math, Array.prototype.slice.call(arguments, 1));
+//            return multi * Math.max.apply(Math, arguments.slice(1));
         }
 
         window.onload = function  () {
