@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax 요청용 콜백에서 클로저 사용하기</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            function animateIt(elementId) {
+                var elem = document.getElementById(elementId);
+                elem.style.position = "absolute";
+                var tick = 0;
+
+                var timer = setInterval(function() { // 이 콜백에서는
+                    // 클로저에 tick과 timer, 외부에서 변수참조로 만든 elem를 가지고 있다.
+                    // 그래서 이 값들을 참조해서 tick을 증가시키면서 style 프로퍼티의 left와 top을 tick으로 할당하고, 하는 연산들을 실행 할 수 있는 것이다.
+                    // 다 클로저 덕분인다.
+                    if (tick < 100) {
+                        elem.style.left = elem.style.top = tick + "px";
+                        tick++;
+                        console.log(elem.style.left);
+                    } else {
+                        clearInterval(timer);
+                        assert(tick == 100, "클로저를 통해 tick 변수에 접근한다.");
+                        assert(elem, "elem 변수 역시 클로저를 통해 접근한다.");
+                        assert(timer, "timer 변수에 대한 참조 역시 클로저를 통해 할 수 있다.");
+                    }
+                }, 10);
+            }
+
+            animateIt('box');
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<div id="testSubject"></div>
+<ul id="results">
+
+</ul>
+<div id="box">박스</div>
+</body>
+</html>
