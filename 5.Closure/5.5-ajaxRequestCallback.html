@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax 요청용 콜백에서 클로저 사용하기</title>
+    <script type="text/javascript">
+        // 이 예제에서는 jQuery를 사용하고 있다.
+        // 직접 실행 해 보지는 않을 것이다.
+        window.onload = function () {
+            // 그냥 jQuery 문법만 대충 설명하면,
+            // 아래의 $('#testButton')은 testButton을 id로 가지는 엘리먼트를 참조 한다.
+            // 해당 엘리먼트에 click 이벤트가 있을 때 이를 처리하는 이벤트 핸들러를 콜백으로 전달했다.
+            $('#testButton').click(function () {// 얘가 그 콜백이다. 예는 나중에 호출 될 것이다.
+                var elem$ = $('#testSubject');  // 여기서 역시 testSubject를 id 애트리뷰트로 가지는 엘리먼트를 참조하는 변수를 설정하고,
+
+                elem$.html('로딩중...');
+
+                $.ajax({
+                    url: "test.html",
+                    success: function (msg) {
+                        // 서버 요청에 대한 응답이 왔고, 그것이 에러가 없는 정상 응답일 경우 해당 함수가 호출되는데...
+                        // 이 때 해당 함수의 클로저는 elem$을 가지고 있고, 내부적으로 참조 가능하기 때문에
+                        assert(elem$, "콜백 함수의 클로저를 통해서 elem$ 변수를 참조 할 수 있다.");
+                        // 이 엘리먼트의 문자를 서버의 응답 메시지로 치환도 가능하다. 아래처럼...
+                        elem$.html(msg);
+                    }
+                });
+            });
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<div id="testSubject"></div>
+<button type="button" id="testButton">Go!</button>
+<ul id="results">
+
+</ul>
+</body>
+</html>
