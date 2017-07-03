@@ -6,6 +6,9 @@
     <script type="text/javascript">
         window.onload = function () {
             function animateIt(elementId) {
+                // 여기서 한가지 더 중요한 점이 있는데
+                // 아래 변수 목록은 유효범위가 함수 내부이다.
+                // 만약 전역 유효범위에 있다면 함수 호출이 3번 있다고 가정 했을 때, timer 함수가 실행 될 때마다 다른 엘리먼트들도 영향을 받게 될 것이다.
                 var elem = document.getElementById(elementId);
                 elem.style.position = "absolute";
                 var tick = 0;
