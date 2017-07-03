@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>클로저를 이용해서 private 변수와 같은 효과를 내기</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            function Ninja() {
+                var feints = 0;
+
+                // 이 함수와
+                // 이런 함수를 getter 함수라고 자바에서는 부른다.
+                this.getFeints = function () {
+                    return feints;
+                }
+
+                // 이 함수에서는 생성자 함수의 유효범위에 있는 feints 변수를 참조 할 수 있는 클로저가 있다.
+                this.feint = function () {
+                    feints++;
+                }
+
+                // 둘 다 별도의 클로저가 있을 것이다.
+            }
+
+            var ninja = new Ninja();
+
+            ninja.feint();
+
+            assert(ninja.getFeints() == 1, "생성자 함수 내부에 있는 feint 변수의 값은 얻어올 수 있다.");
+
+            // feints는 직접 접근 할 수 없지만, 함수를 통해 접근 할 수 있다. 즉, private 변수의 효과를 가지게 된다.
+            assert(ninja.feints === undefined, "하지만 private 변수에는 직접 접근 할 수 없다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
