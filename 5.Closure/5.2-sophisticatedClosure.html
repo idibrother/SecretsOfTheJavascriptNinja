@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>간단하지 않은 클로저</title>
+    <script type="text/javascript">
+        window.onload = function () {
+            var outerValue = "ninja";
+
+            var later;
+
+            // outerFunction 함수를 정의할 때 만들어지는 클로저에는 outerValue와 later가 포함된다.
+            function outerFunction() {
+                var innerValue = 'samurai';
+
+                // 이 함수는 아직 정의되지 않는다.
+                // 요 함수가 정의되고, 이 때 이 함수가 가지고 있는 클로저는 outerValue, later, innerValue 일 것이다.
+                // outerFunction도 클로저에 포함되는가? 함 보자. 그렇구나.
+                function innerFunction() {
+                    assert(outerValue, "I can see the ninja");
+                    assert(innerValue, "I can see the samurai");
+
+                    assert(typeof outerFunction == "function", "I can see the outerFunction");
+                }
+
+                // 여기서 생성되기 때문에
+                later = innerFunction;
+            }
+
+            //여기서 outerFunction을 호출 할 때
+            outerFunction();
+
+            // outerFunction을 호출 한 뒤에는 innerFunction에 대한 참조가
+            // 이렇게 호출이 가능하다.
+            later();
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
