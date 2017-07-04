@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>함수를 위한 memoization 메서드</title>
+    <script type="text/javascript">
+
+        Function.prototype.memoized = function (key) {
+            this._values = this._values || {};
+            return this._values[key] !== undefined ?
+                this._values[key] :
+                this._values[key] = this.apply(this, arguments);
+        }
+
+        Function.prototype.memoize = function () {
+            // 함수 컨텍스트를 참조하는 변수를 만들고
+            var fn = this;
+            // 아래 익명 함수에서 사용한다.
+            // 해당 함수를 사용 할 때 memoized를 호출하고, 함수 컨텍스트는 memoize 함수를 호출하는 함수 자신이 되며,
+            // 아래 익명 함수를 참조하게 되고, 내부적으로는 소수를 판별하는 기능을 수행하지만
+            // memoized 함수를 호출 할 때 함수 콘텍스트 설정을 통해 내부적으로 함수 결과가 캐싱된다.
+            return function () {
+                // 파라미터는 나중에 호출 시점에 전달 받은 것을 사용한다.
+                return fn.memoized.apply(fn, arguments);
+            }
+        }
+
+        // isPrime 변수는 memoize 함수에서 리턴한 익명 함수를 참조하고,
+        // 해당 익명 함수는 memoize 함수를 통해 memoized 기능을 오버라이딩 하고 있다.
+         var isPrime = (function (num) {
+            var prime = num != 1;
+            for (var i = 2; i < num; i++) {
+                if (num% i == 0) {
+                    prime = false;
+                    break;
+                }
+            }
+            return prime;
+        }).memoize(); // 이렇게 memoize 함수를 호출하면 isPrime 변수는
+
+
+        window.onload = function () {
+            assert(isPrime(17), "17은 소수다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
