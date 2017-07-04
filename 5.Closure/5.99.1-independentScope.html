@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>독립적인 유효범위 생성하기</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            (function () {
+                var numClicks = 0;
+                // 클로저를 이용해서 아래의 이벤트 핸들러 함수에서만 접근 할 수 있는 독립적인 변수를 설정 할 수 있다.
+                document.addEventListener(function () {
+                    alert(++numClicks);
+                }, false);
+            })();
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
