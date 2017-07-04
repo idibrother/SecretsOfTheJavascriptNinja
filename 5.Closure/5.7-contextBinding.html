@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>특정 콘텍스트를 함수에 바인딩하기</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            // 특정 콘텍스트를 이벤트 핸들러에 바인딩 하기 위해 아래의 함수를 추가한다.
+            function binding(context, name) {
+                // 아래 익명 함수의 클로저에는 binding 함수와 context, name 매개변수가 포함되어 있기 때문에
+                // 결과적으로 아래 익명함수는 콘텍스트를 대상 엘리먼트로 설정되지만
+                return function () {
+                    // 아래와 같이 참조가 가능하고,
+                    // 실제 함수를 호출 할 때는 apply() 메소드의 특징을 이용해 context(button 객체)를 콘텍스트로 만들게 된다.
+                    context[name].apply(context, arguments);
+                }
+            }
+
+            var button = {
+                clicked: false,
+
+                // 나중에 이것이 실행이 되지만,
+                // 결과는...
+                click: function () {
+                    // 바로 아래 문장이 제대로 실행되었다면 그 아래 테스트는 성공해야 맞다.
+                    // 그런데 실패한다. 왜?
+                    // this를 가지고 참조하면 엘리먼트의 clicked 프로퍼티를 true로 설정하지 자신의 객체에 있는 clicked를 설정하지 않는다.
+                    // 그래서... 클로저가 해답이라고 한다. 어떻게? 함 보자!
+                    // 그래서 this는 위 bind 함수에서 매개변수로 전달한 context(button 객체)를 참조하므로
+                    // 결과적으로 그 아래 테스트가 정상적으로 동작하게 된다.
+                    this.clicked = true;
+                    assert(button.clicked, "버튼이 클릭됨");
+                }
+            }
+
+            var elem = document.getElementById("test");
+
+            // button 객체의 click 메서드를 버튼의 클릭 이벤트 핸들러로 등록 후
+            // 아래와 같이 핸들러 함수의 경우 자신의 콘텍스트를 이벤트 핸들러 함수의 이벤트 객체로 설정한다. 그래서
+            // 그리고 이벤트 핸들러 함수를 bind 함수로 설정하고,
+            elem.addEventListener("click", binding(button, 'click'), false);
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<button id="test">Click Me!</button>
+</body>
+</html>
