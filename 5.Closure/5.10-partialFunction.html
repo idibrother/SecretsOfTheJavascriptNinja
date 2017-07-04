@@ -47,6 +47,23 @@
                 results[2] == "Fuu",
             "The text values were split properly.")
 
+            // 네이티브 함수 외에도 timer 함수나 이벤트 바인딩 함수도 매개변수를 부분적으로 할당이 가능한다고 한다.
+            // 아래 예제는 이벤트 핸들러 말고, 이벤트 지연 시간을 부분적으로 설정 하고,
+            // 나중에 이벤트 핸들러 함수를 설정한 부분 적용함수 예제이다.
+            var delay = setTimeout.partial(undefined, 10);
+            delay(function() {
+                assert(true, "이 함수는 10초 후에 자동으로 실행된다.")
+            });
+
+            // 이벤트 핸들러 적용 함수 예도 추가로 보면,
+            // 두 번째 인자로 이벤트 핸들러 함수를 나중에 설정하는 공통 함수로 사용 될 수 있겠다.
+            var bindClick = document.body.addEventlistener.partial("click", undefined, false);
+
+            bindClick(function() {
+                assert(true, "커리된 함수를 통해서 클릭 이벤트가 발생한다.");
+            });
+
+
         }
 
         function assert (value, desc) {
