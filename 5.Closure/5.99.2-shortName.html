@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>짧은 이름을 이용해서 코드 가독성 높이기</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var short  = Some.long.reference.to.somthing;
+
+            (function (v) {
+                Object.extend(v, {
+                    href: v._getAttr // 본래는 Element.attributeTranslations.read.values._getAttr 이런 식이 되어야 할 것 이다.
+                })
+            })(Element.attributeTranslations.read.values);
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<img src="../images/ninja-with-pole.png">
+<ul id="results">
+
+</ul>
+</body>
+</html>
