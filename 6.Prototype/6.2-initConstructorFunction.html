@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입에 있는 메서드를 가진 새 인스턴스 생성하기</title>
+    <script type="text/javascript">
+
+        function Ninja () {
+            this.swung = false;
+            // 이 것이 인스턴스 메서드인 것 같은데...
+            // 인스턴스 메서드가 프로토타입에 정의된 같은 이름의 프로퍼티를 재정의한다고 한다.
+            this.swingSword = function () {
+                return !this.swung;
+            }
+        }
+
+        Ninja.prototype.swingSword = function () {
+            return this.swung;
+        }
+
+        window.onload = function () {
+            var ninja = new Ninja();
+
+            assert(ninja.swingSword(), "프로토타입 메서드 대신 인스턴스 메서드가 호출된다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
