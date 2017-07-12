@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>인스턴스 타입과 그 생성자 살펴보기</title>
+    <script type="text/javascript">
+
+        function Ninja() {
+        }
+
+
+        window.onload = function () {
+            // 객체를 생성한 후에
+            var ninja = new Ninja() ;
+
+            assert(typeof ninja == "object", "인스턴스의 타입은 Object이다.");
+
+            // 어떤 생성자 함수를 통해 만들어진 객체인지를 확인한다.
+            assert(ninja instanceof Ninja, "instanceof를 사용하여 생성자를 식별함");
+
+            // instanceof 연산자와 비슷한 결과를 확인 할 수 있다.
+            assert(ninja.constructor == Ninja, "Ninja 함수를 사용하여 ninja 객체를 만들었다.");
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
