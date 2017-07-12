@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입에 있는 메서드를 가진 새 인스턴스 생성하기</title>
+    <script type="text/javascript">
+
+        function Ninja() {
+
+        }
+
+        Ninja.prototype.swingSword = function () {
+            return true;
+        }
+
+        window.onload = function () {
+            // 여기는 그냥 단순히 함수를 호출한 것이지만
+            var ninja1 = Ninja();
+
+            assert(ninja1 === undefined, "Ninja 인스턴스가 생성되지 않았다.");
+
+            var ninja2 = new Ninja();
+            assert(ninja2 && ninja2.swingSword && ninja2.swingSword(), "인스턴스가 생성되었고 메서드 호출 도 할 수 있다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
