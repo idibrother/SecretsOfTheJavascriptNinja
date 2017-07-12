@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입을 변경하고, 그로 인한 영향 관찰하기</title>
+    <script type="text/javascript">
+
+        function Ninja() {
+            this.swung = true;
+        }
+
+
+        window.onload = function () {
+            // 객체를 생성한 후에
+            var ninja = new Ninja() ;
+
+            // 프로토타입을 정의 했지만,
+            // 이건은 단순한 복사가 아니고, 덧분인다는 의미가 있다고 한다.
+            Ninja.prototype.swingSword = function () {
+                return this.swung;
+            }
+
+            // 그래서 아래 함수가 정상 실행되고,
+            // 객체는 직접 가진 프로퍼티가 없으면, 프로토타입을 검토한다고 한다.
+            assert(ninja.swingSword(), "순서가 맞지 않지만, 객체 인스턴스에 메서드가 존재한다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
