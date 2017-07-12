@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입을 사용하여 상속을 시도</title>
+    <script type="text/javascript">
+
+        function Person () {
+
+        }
+
+        Person.prototype.dance = function () {};
+
+        function Ninja() {};
+
+        Ninja.prototype = { dance : Person.prototype.dance };
+
+        window.onload = function () {
+            var ninja = new Ninja();
+
+            assert(ninja instanceof Ninja, "ninja는 Ninja 프로토타입의 기능을 물려받았다.");
+
+            // 위와 같이 프로토타입의 값을 참조만 해주면 복사만 하는 것일 뿐 상속의 개념은 아니다.
+            assert(ninja instanceof Person, "그리고 ninja는 Person 프로토타입의 기능을 물려받았다.");
+            assert(ninja instanceof Object, "모든 객체는 Object 프로토타입의 기능을 물려받는다.");
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
