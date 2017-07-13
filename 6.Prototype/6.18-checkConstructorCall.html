@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>생성자로 함수를 호출했는지 판단하기</title>
+    <script type="text/javascript">
+
+        function Test() {
+            return this instanceof arguments.callee;
+        }
+
+        window.onload = function () {
+            // 이렇게 호출하면 instanceof arguments.callee는 Test 객체가 아니고,
+            assert(!Test(), "인스턴스를 만들지 않았다. 함수의 반환 값은 false이다.");
+
+            // 이렇게 호출하면 instanceof arguments.callee는 Test 객체가 된다.
+            assert(new Test(), "인스턴스를 만들었다.")
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
