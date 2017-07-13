@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>HtmlElement 프로토타입을 사용하여 모든 HTML 엘리먼트에 메서드 추가하기</title>
+    <script type="text/javascript">
+
+        // 모든 DOM 엘리먼트는 HTMLElement 생성자를 상속하기 때문에 HTMLElement 함수의 프로토타입에 remove를 추가하면
+        // 모든 DOM 엘리먼트에서 remove 함수를 사용 할 수 있다.
+        HTMLElement.prototype.remove = function () {
+            // remove 함수는 parentNode가 있을 경우 parentNode에서 자기 자신을 제거한다.
+            if (this.parentNode) {
+                this.parentNode.removeChild(this);
+            }
+        };
+
+        window.onload = function () {
+            // 위의 함수가 없다면 명시적으로 parentNode를 통해서 삭제 하고,
+            var a = document.getElementById("a");
+            a.parentNode.removeChild(a);
+
+            // HTMLElement 함수의 프로토타입에 추가한 remove 메서드를 통해 parentNode를 명시하지 않고 삭제가 가능하다.
+            document.getElementById("b").remove();
+            assert(!document.getElementById("a"), "a는 제거되었다.");
+            assert(!document.getElementById("b"), "b도 제거되었다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="parent">
+    <div id="a">제거될 영역이다.</div>
+    <div id="b">이곳 또한 제거될 영역이다.</div>
+</div>
+</body>
+</html>
