@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object 프로토타입에 프로퍼티를 추가함으로써 일어나는 예상치 못한 작용</title>
+    <script type="text/javascript">
+
+        Object.prototype.keys = function () {
+            var keys = [];
+            for (var p in this) {
+                keys.push(p);
+            }
+            return keys;
+        }
+        window.onload = function () {
+
+            // 아래 객체만 봐서는 프로퍼티 갯수가 3이어야 할 것 처럼 보이지만
+            // 모든 오브젝트에 keys 함수가 추가되었으므로 keys 또한 프로퍼티 중 하나에 포함된다.
+            var obj = {a: 1, b: 2, c: 3};
+
+            // 하지만...
+            // 4개의 프로퍼티가 배열에 포함된다.
+            assert(obj.keys().length == 3, "이 객체에는 세개의 프로퍼티가 있다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
