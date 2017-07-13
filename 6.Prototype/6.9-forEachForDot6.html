@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>자바스크립트 1.6에서도 계속 사용 할 수 있는 forEach 메서드 구현하기</title>
+    <script type="text/javascript">
+
+        // 이미 Array 객체가 forEach를 가지고 있을 경우 통과
+        if (!Array.prototype.forEach) {
+            // 없으면 함수 추가
+            Array.prototype.forEach = function (callback, context) {
+                for (var i = 0; i < this.length; i++) {
+                    // context로 undefined를 넘기지 않기 위해 없을 경우 null을 전달
+                    callback.call(context || null, this[i], i, this);
+                }
+            };
+        }
+
+        window.onload = function () {
+            ["a", "b", "c"].forEach(function (value, index, array) {
+                assert(value, (array.length - 1) + " 중 " + index + "위치에 있음.");
+            });
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
