@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Object 프로토타입 확장으로 인한 말썽을 잠재우기 위한 hasProperty() 메서드 사용</title>
+    <script type="text/javascript">
+
+        Object.prototype.keys = function () {
+            var keys = [];
+            for (var i in this) {
+                // hasOwnProperty를 사용하면 인스턴트 스로퍼티만 참조 할 수 있다.
+                if (this.hasOwnProperty(i)) {
+                    keys.push(i);
+                }
+            }
+            return keys;
+        }
+
+        window.onload = function () {
+
+            var obj = {a: 1, b: 2, c: 3};
+
+            // 그래서 프로토타입에 정의한 keys() 함수를 제외한 값만 keys() 함수의 리턴값이 된다.
+            assert(obj.keys().length = 3, "이 객체에는 3개의 프로퍼티가 있다.")
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
