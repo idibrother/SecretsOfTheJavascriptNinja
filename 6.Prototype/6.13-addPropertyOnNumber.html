@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Number 객체 확장하기</title>
+    <script type="text/javascript">
+
+        Number.prototype.add = function (num) {
+            return this + num;
+        }
+
+        window.onload = function () {
+            var n = 5;
+
+            assert(n.add(3) == 8, "변수값이 숫자라면 문제없이 동작한다.");
+            assert((5).add(3) == 8, "숫자가 괄호에 둘러싸여 있어도 잘 동작한다.");
+
+            // 아래 문장 때문에 오류가 날 것이다.
+            // 이러한 오용때문이라도 Number 객체를 확장한다면 반드시 사용법을 잘 정리해줘야 한다.
+//            assert(5.add(3) == 8, "단순한 형태의 리터럴은 어떻게 될까?");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
