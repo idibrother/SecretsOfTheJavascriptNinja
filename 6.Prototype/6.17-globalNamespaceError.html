@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>의도치 않게 전영 네임스페이스에 어떤 변수를 넣어버린다.</title>
+    <script type="text/javascript">
+
+        function User (first, last) {
+            // 아래 문장이 전역 변수 값을 변경해버렸다.
+            // 지금 예제에서는 코드가 길지 않아서 금방 파악이 가능 할 수도 있지만....
+            // 내용이 길어지면 끔찍하다....
+            this.name = first + " " + last;
+        }
+
+        var name = "루키아";
+
+        // 일부러 new 키워드를 누락시켰다.
+        // 여기서 new 키워드를 빼먹어서
+
+        var user = User("이치고", "쿠로사키");
+
+        window.onload = function () {
+            // 우리는 전역 변수 name을 저의 했으므로 '루키아'일 것이라고 생각하고 사용 할 것이지만.
+            assert(name == "루키아", "루키아로 이름을 설정하였다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
