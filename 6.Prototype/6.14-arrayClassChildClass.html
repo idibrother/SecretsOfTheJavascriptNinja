@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array 객체의 하위 클래스 만들기</title>
+    <script type="text/javascript">
+
+        function MyArray () {
+
+        }
+
+        // 메서드 참조 체이닝을 사용해서 아래의 형태와 같이 상속을 구현할 수 있다.
+        MyArray.prototype = new Array();
+        var mine = new MyArray();
+        mine.push(1, 2, 3);
+
+        window.onload = function () {
+            // 아래 테스트 항목들은 익스플로러가 아니면 문제 없이 동작한다고 한다.
+            // 하지만, 익스플로러에서는 length 프로퍼티가 Array의 인덱스와 관련이 있기 때문에 약간 특별하다고 하는데...
+            // 뭐가 특별한지는 모르겠지만 그냥 그렇다 치고, 오래된 버전의 익스플로러에서는 잘 동작하지 않을거라고 한다.
+            // 믿거나 말거나...
+            assert(mine.length == 3, "모든 항목이 하위 클래스 배열에 있다.");
+            assert(mine instanceof Array, "Array 기능을 구현하였다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
