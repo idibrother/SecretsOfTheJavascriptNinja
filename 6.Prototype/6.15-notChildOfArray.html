@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Array 기능을 흉내내서 Array의 하위 클래스가 아닌 객체 만들기</title>
+    <script type="text/javascript">
+
+        function MyArray() {
+
+        }
+        MyArray.prototype.length = 0;
+
+        // 설명이 좀 길것 같다.
+        (function () {
+            // 변수의 유효범위를 일회성으로 한정하기 위해 즉시실행 함수 형태를 사용한 것 같다.
+            var methods = ['push', 'pop', 'shift', 'unshift', 'slice', 'splice', 'join'];
+
+            // 위 배열은 Array 객체가 가진 함수 목록인것 같고,
+            for (var i = 0; i < methods.length; i++) {
+                // for 문 하위에서 또 즉시 실행함수를 사용했는데...
+                // 클로저를 특성을 사용해서 아래의 익명 함수가 정의되는 포인트의 참조 변수를 만들기 위함이다.
+                (function (name) {
+                    MyArray.prototype[name] = function () {
+                        Array.prototype[name].apply(this, arguments);
+                    }
+                })(methods[i]);
+                
+                // 아래와 같이 해도 될 것 같다고 생각 할 수도 있지만,
+                // i값이 변함에 따라서 마지막 값에 대한 참조만을 이용 할 수 있게 된다.
+                // 이전 예제 중에서 for 문을 사용 할 때 변수의 유효범위를 지정한 것이 기억난다.
+//                MyArray.prototype[methods[i]] = function () {
+//                    Array.prototype[methods[i]].apply(this, arguments);
+//                }
+            }
+        })();
+
+        window.onload = function () {
+            var mine = new MyArray();
+            mine.push(1, 2, 3);
+            assert(mine.length == 3, "모든 항목은 하위 클래스를 사용하여 만든 배열에 존재한다.");
+            assert(!(mine instanceof Array), "그러나 MyArray는 Array를 상속하지는 않았다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
