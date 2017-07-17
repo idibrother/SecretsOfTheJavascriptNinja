@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>조금 더 전톡적인 객체지향 스탈이 가까운 상속문법 제시하기</title>
+    <script type="text/javascript">
+
+        (function () {
+            var initializing = false,
+                // 아래의 문장으로 함수의 toString 함수 존재 유무를 파악한다.
+                // test에 함수를 넘기면 자동으로 toString을 실행하나보다. 그래서...
+                // 나중에 함수의 본문에 _super라는 문구가 있을 경우 아마도 부모의 함수를 실행하려나 보다.
+                superPattern = isSerializable(function () {xyz;}) ? /\b_super\b/ : /.*/;
+
+            // Object에 subClass라는 프로퍼티를 추가하여 상속을 구현 할 것 같다.
+            Object.prototype.subClass = function (properties) {
+                var _super = this.prototype;
+
+                initializing = true;
+                // 해당 생성자 함수(아마도 자식 클래스)를 사용해서 객체를 만들고,
+                // proto라는 변수가 참조하게 한다.
+                var proto = new this();
+                initializing = false;
+
+                // subClass 함수로 전달된 properties를 확인해서
+                for (var name in properties) {
+
+                    proto[name] =
+                        // 자신의 properties[name]이 함수이고,
+                        // _super[name]이 함수이고,
+                        // 자식 클래스의 함수 본문에 _super를 포함하고 있으면
+                        typeof properties[name] == "function" &&
+                            typeof _super[name] == "function" &&
+                            superPattern.test(properties[name]) ?
+                            // 함수로 호출해서 리턴하고,
+                            (function (name, fn) {
+                            return function () {
+                                // 익명 클래스의 _super 프로퍼티를 임시 변수에 할당시키고,
+                                var tmp = this._super;
+
+                                // _super[name] 부모클래스의 name 프로퍼티를 익명 클래스의 _super가 참조하게 한 다음
+                                this._super = _super[name];
+
+                                // 매개변수 fn을 컨택스트 참조 및 호출
+                                var ret = fn.apply(this, arguments);
+
+                                // _super 프로퍼티 복구(_super 프로퍼티가 이미 있는 경우를 보존하기 위해서)
+                                this._super = tmp;
+
+                                // fn 호출 결과를 리턴
+                                return ret;
+                            };
+                        })(name, properties[name]) :
+                        // 아니면 프로퍼티 그대로를 사용한다.
+                        properties[name];
+                }
+
+                function Class() {
+                    // initializing이 false이고, init 메서드가 있을 경우
+                    if (!initializing && this.init) {
+                        // init 메서드를 실행한다.
+                        // init 메서드의 내용에 _super가 있으면, Class의 프로토타입에는 _super 프로퍼티가 추가되어 있고,
+                        // _super에 부모 클래스의 init 함수가 할당되어 있기 때문에 객체지향 특성대로 동작한다.
+                        this.init.apply(this, arguments);
+                    }
+                }
+
+                // 힘수 실행 결과 또는 프로토타입의 프로퍼티를 Class 생성자 함수의 프로토타입이 참조하게 하고
+                Class.prototype = proto;
+
+//                Class.constructor = Class;
+//
+//                Class.subClass = arguments.callee;
+
+                return Class;
+            }
+        })();
+
+        var Person = Object.subClass({
+            init: function(isDancing) {
+                this.dancing = isDancing;
+            },
+
+            dance: function () {
+                return this.dancing;
+            }
+        });
+
+        var Ninja = Person.subClass({
+            init: function() {
+                this._super(false);
+            },
+
+            dance: function () {
+                return this._super();
+            },
+
+            swingSword: function () {
+                return true;
+            }
+        });
+
+        function isSerializable(fn) {
+            /xyz/.test(fn);
+        }
+
+        window.onload = function () {
+            var person = new Person(true);
+            assert(person.dance(), "person은 춤을 춘다");
+
+            var ninja = new Ninja();
+            assert(ninja.swingSword(), "칼을 휘두른다.");
+
+            assert(!ninja.dance(), "ninja는 춤을 추지 않는다.");
+
+            assert(person instanceof Person, "person은 Person이다.");
+
+            assert(ninja instanceof Ninja &&
+            ninja instanceof Person, "ninja는 Ninja이고 Person이다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
