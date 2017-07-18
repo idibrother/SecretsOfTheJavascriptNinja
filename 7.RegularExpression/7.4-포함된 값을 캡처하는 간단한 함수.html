@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>포함된 값을 캡처하는 간단한 함수</title>
+    <script type="text/javascript">
+
+        function getOpacity(elem) {
+            var filter = elem.style.filter;
+            // 아래 문장은 컴파일 된 정규표현식을 실행하는 예이다.
+            var regexp = /opacity=([^)]+)/;
+            // filter 프로퍼티가 있고, filter 프로퍼티가 opacity= 문자열을 포함하고 있으면
+            // opacity= 다음 문자열 중 닫는 괄호가 아닌 모든 문자열 한 개 이상을 캡처
+            // match 함수의 결과는 0번째 안에 filter:alpha(opacity=50)를, 1번 째 안에 50이 있는 배열이다.
+            return filter ?
+                filter.indexOf("opacity=") >= 0 ? (parseFloat(filter.match(regexp)[1] / 100)) : ""
+                // 최신 브라우저는 아래의 값으로 스타일의 값을 참조 할 수 있는 것 같다.
+                : elem.style.opacity;
+        }
+
+        window.onload = function () {
+            var opacity = getOpacity(document.getElementById("opacity"));
+            // 하지만 최신 브라우저에는 filter 속성을 인식하지 않는 것 같다.
+            assert(opacity == "0.5", "엘리먼트의 불투명도를 찾았다.");
+            // 이 번 예제에서 중요한 부분은 match 함수 이므로 테스트 해 보자.
+            var regexp = /opacity=([^)]+)/;
+            var s = "filter:alpha(opacity=50)";
+            var message = s.match(regexp);
+            // 예상대로면 0번 째는 전체 문자열인 filter:alpha(opacity=50)이 있고,
+            // 1번째에는 실제 정규 표현식 결과인 50이 있을 것 같다.
+            // match 결과를 확인 한 결과 1번째 배열에는 그룹을 포함 한 전체 문자열을 opacity=50으로 되어 있다.
+            assert(message[0] == "opacity=50", "opacity=50 이 정규표현식을 match 함수로 실행 한 결과의 0번 째 인덱스에 있고,")
+            assert(message[1] == "50", "50이 1번 째 인덱스에 있다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
