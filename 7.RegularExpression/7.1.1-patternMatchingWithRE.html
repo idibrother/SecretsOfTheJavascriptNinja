@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>프로토타입에 있는 메서드를 가진 새 인스턴스 생성하기</title>
+    <script type="text/javascript">
+
+        function isThisZipCode(candidate) {
+            return /^\d{5}-\d{4}$/.test(candidate);
+        }
+
+        window.onload = function () {
+            // 우편번호 형식은 00000-0000
+            var candidate1 = '12341-5678';
+            assert(isThisZipCode(candidate1), candidate1 + " : 우편번호 형식에 맞다.");
+
+            var candidate2 = '1234-15678';
+            assert(isThisZipCode(candidate2), candidate2 + " : 우편번호 형식에 맞지 않다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
