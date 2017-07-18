@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>나중에 사용 할 수 있도록 런타임에 정규 표현식을 컴파일하기</title>
+    <script type="text/javascript">
+
+        function findClassInElements(className, type) {
+            var elems = document.getElementsByTagName(type || "*");
+
+            // 클래스명을 사이에 두고 공백 또는 문자열로 시작하고 끝나는 경우
+            var regex = new RegExp("(^|\\s)" + className + "(\\s|$)");
+
+            var results = [];
+
+            for(var i = 0, length = elems.length; i < length; i++) {
+                if (regex.test(elems[i].className)) {
+                    results.push(elems[i]);
+                }
+            }
+
+            return results;
+        }
+
+        window.onload = function () {
+            assert(findClassInElements("ninja", "div").length == 2, "예상했던 수 만큼 ninja라는 클래스를 가진 div를 찾았다.");
+            assert(findClassInElements("ninja", "span").length == 1, "예상했던 수 만큼 ninja라는 클래스를 가진 span을 찾았다.");
+            assert(findClassInElements("ninja").length == 3, "예상했던 수 만큼 ninja라는 클래스를 가진 엘리먼트를 찾았다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div class="samurai ninja"></div>
+<div class="ninja samurai"></div>
+<div></div>
+<span class="samurai ninja ronin"></span>
+</body>
+</html>
