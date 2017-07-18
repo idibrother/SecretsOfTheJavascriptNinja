@@ -9,6 +9,7 @@
             var elems = document.getElementsByTagName(type || "*");
 
             // 클래스명을 사이에 두고 공백 또는 문자열로 시작하고 끝나는 경우
+            // 미리 정의된 문자 클래스를 표현한 부분에서 \\가 두 번 반복하고 있는데 RegExp 클래스로 정규 표현식을 컴파일 할 때는 이렇게 해줘야 함
             var regex = new RegExp("(^|\\s)" + className + "(\\s|$)");
 
             var results = [];
