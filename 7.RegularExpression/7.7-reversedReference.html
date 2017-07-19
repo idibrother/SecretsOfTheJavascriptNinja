@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>역참조를 이용해서 HTML 태그의 내용을 매치시키기</title>
+    <script type="text/javascript">
+
+        var html = "<b class='hello'>Hello</b> <i>world!</i>";
+
+        // 역참조의 개념은 첫 번 째 캡처의 내용을 참조하는 것이다.
+        // 여는 괄호(<) 뒤에 첫 번 째 그룹이 있고, 캡처된 내용은 문자 한개 이상인 문자열이고 닫는 괄호가 닫는 괄호가 아닌 문자열 바로 앞까지 캡처한다.
+        // 전체 문자열이 <b class='hello'>Hello</b>일 경우 여는 괄호(<) 뒤의 문자열은 닫는 괄호가 아닌 문자열 바로 앞 까지 문자열인 b이다.
+        var pattern = /<(\w+)([^>]*)>(.*?)<\/\1>/g;
+
+        window.onload = function () {
+            var match = pattern.exec(html);
+            assert(match[0] == "<b class='hello'>Hello</b>", "첫 번 째 여는 태그와 닫는 태그 쌍을 매칭시킨다.");
+            assert(match[1] == "b", "첫 번 째 매치의 첫 번 째 캡쳐를 저장한다.");
+            assert(match[2] == " class='hello'", "첫 번 째 매치의 두 번 째 캡처를 저장한다.");
+            assert(match[3] == "Hello", "첫 번 째 매치의 세 번 째 캡처를 저장한다.");
+
+            match = pattern.exec(html);
+            assert(match[0] == "<i>world!</i>", "두 번 째 여는 태그와 닫는 태그 쌍을 매칭시킨다.");
+            assert(match[1] == "i", "두 번 째 매치의 첫 번 째 캡처를 저장한다.");
+            assert(match[2] == "", "두 번 째 매치의 두 번 째 캡처를 저장한다.");
+            assert(match[3] == "world!", "두 번 째 매치의 세 번 째 캡처를 저장한다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
