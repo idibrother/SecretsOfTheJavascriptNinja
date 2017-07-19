@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>exec() 메서드를 이용해 전역 검색과 캡처를 함께 사용하기</title>
+    <script type="text/javascript">
+
+        var html = "<div class='test'><b>Hello</b> <i>world!</i></div>"
+        var tag = /<(\/?)(\w+)([^>]*?)>/g, match;
+        var num = 0;
+
+        window.onload = function () {
+
+            while ((match = tag.exec(html)) !== null) {
+                // exec 메서드는 글로벌 플래그를 기준으로 하나의 매치를 찾고, 그 안의 그룹에 의해 캡처되는 문자열을 배열로 저장한다.
+                // 그리고 exec() 메서드는 이전에 매치된 문자열을 제외한 나머지 문자열을 기준으로 match를 실행한다.
+                // 플래그를 지정하지 않고 match를 실행하고, 남은 문자열을 기준으로 match를 반복 실행한 결과인 것 같다.
+                assert(match.length == 4, "모든 매치는 태그를 하나 찾고, 캡처를 3개 포함한다.");
+                num++;
+            }
+
+            // html 문자열의 매치되는 태그 목록이 총 6개이다.
+            // <div class='test'>, <b>, </b>, <i>. </i>, </div>
+            assert(num == 6, "여는 태그 3개와 닫는 태그 3개를 찾았다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
