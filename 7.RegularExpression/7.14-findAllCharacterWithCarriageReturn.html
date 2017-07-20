@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>개행문자를 포함한 모든 문자열 찾기</title>
+    <script type="text/javascript">
+
+        var html = '<b>Hello</b>\n<i>world!</i>';
+
+        window.onload = function () {
+            assert(/.*/.exec(html)[0] === "<b>Hello</b>", "일반 문자는 개행문자를 다루지 않는다.");
+            // 원리는 모르겠지만 아래 두 정규 표현식은 개행문자를 포함한 문자열을 매치시킨다고 한다.
+            assert(/[\s\S]*/.exec(html)[0] === "<b>Hello</b>\n<i>world!</i>", "문자 집합을 이용해서 모든 문자를 매치시킨다.");
+            assert(/(?:.|\s)*/.exec(html)[0] === "<b>Hello</b>\n<i>world!</i>", "캡처를 하지 않는 그룹을 이용해서 모든 문자를 매치시킨다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
