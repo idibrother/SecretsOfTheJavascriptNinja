@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>문자열에서 공백을 제거하는 일반적인 방법</title>
+    <script type="text/javascript">
+
+        function trim(str) {
+            // 시작 문자열이나 끈 문자열에 공백 문자열이 1번 이상 반복되는 경우 빈 문자열로 치환
+            return (str || "").replace(/^\s+|\s+$/g, "");
+        }
+
+        window.onload = function () {
+            assert(trim(" #id div.class ") == "#id div.class", "공백 문자열이 제거되었다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
