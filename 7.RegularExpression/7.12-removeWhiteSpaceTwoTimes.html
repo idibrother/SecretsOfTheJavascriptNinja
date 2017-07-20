@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>치환을 문자열에서 공백을 제거하는</title>
+    <script type="text/javascript">
+
+        function trim(str) {
+            // +와 | 연산자 사용하지 않음
+            var first = str.replace(/^\s\s*/, '');
+            var last = first.replace(/\s\s*$/, '');
+            return last;
+        }
+
+        window.onload = function () {
+            var result = trim(" #id div.class ");
+            assert(result == "#id div.class", "공백 문자열이 제거되었다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
