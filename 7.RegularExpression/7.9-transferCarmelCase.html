@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>대시로 연결된 문자열을 낙타 표기법으로 변환하기</title>
+    <script type="text/javascript">
+
+        // 해당 함수는 replace 함수의 두 번 째 인자의 콜백으로 사용되며,
+        // 첫 번 째 매개변수로 매칭 결과를, 두 번 째 매개변수로 캡처내용을 전달받아서 적절한 동작을 수행한다.
+        // 매칭 결과의 내용을 해당 콜백 결과로 치환한다.
+        function upper (all, letter) {
+            return letter.toUpperCase();
+        }
+
+        window.onload = function () {
+            var pattern = /-(\w)/g;
+            // replace 함수의 두 번 째 인자로 함수를 전달하면 매칭 결과와 캡처의 내용을 함수의 매개변수로 전달한다.
+            var result = "border-bottom-width".replace(pattern, upper);
+            assert(result == "borderBottomWidth", "대시로 연결된 문자열을 낙타표기법으로 변환하였다.")
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
