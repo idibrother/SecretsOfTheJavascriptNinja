@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>문자열의 끝을 잘라내는 trim 메서드</title>
+    <script type="text/javascript">
+
+        function trim(str) {
+            var str = str.replace(/^\s\s*/, ''),
+                ws = /\s/,
+                i = str.length;
+            // 입력 문자열의 끝부터 공백 갯수만큼 인덱스를 줄이고
+            while (ws.test(str.charAt(--i)));
+            // 0에서 i + 1번 째 문자열로 잘라서 리턴
+            return str.slice(0, i + 1);
+        }
+
+        window.onload = function () {
+            var result = trim(" #id div.class ");
+            assert(result == "#id div.class", "공백 문자열이 제거되었다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="opacity" style="opacity:0.5;filter:alpha(opacity=50);"></div>
+</body>
+</html>
