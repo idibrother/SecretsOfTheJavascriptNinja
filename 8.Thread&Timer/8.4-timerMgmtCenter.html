@@ -46,6 +46,7 @@
             box.style.position = "absolute";
 
             // 하나의 타이머에 두 개의 함수를 추가했다.
+            // 콜백들이 등록된 순서를 반드시 유지한다. 이는 여러 타이머의 콜백의 실행 순서를 보장 못하는 제약을 제거 할 수 있다.
             timers.add(function () {
                 box.style.left = x + "px";
                 if (++x > 50) {
