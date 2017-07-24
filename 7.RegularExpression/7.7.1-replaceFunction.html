@@ -10,7 +10,10 @@
         var s = "fontFamily";
 
         window.onload = function () {
-            var result = s.replace(pattern, "-$1").toLowerCase();
+            // F => -F
+            var replacedString = s.replace(pattern, "-$1");
+            // -F => -f
+            var result = replacedString.toLowerCase();
             // 대시(-)와 첫 번 째 캡처 내용을 조함 하고 소문자로 변경한다.
             assert(result == "font-family", "낙타 표기법을 대시(-)를 이용한 문자열로 변환한다.");
         }
