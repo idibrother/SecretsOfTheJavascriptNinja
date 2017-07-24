@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>반복되는 타이머를 생성하는 두 가지 방법</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var indexI = 0, indexT = 0;
+            // 1초 후에 타이머 만료 및 repeatMe 실행
+            setTimeout(function repeatMe() {
+                console.log("timeout #" + indexT++);
+                setTimeout(repeatMe, 1000);
+            }, 1000);
+
+            // 1초 마다 인터벌 발생
+            setInterval(function () {
+                console.log("interval #" + indexI++);
+            }, 1000);
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
