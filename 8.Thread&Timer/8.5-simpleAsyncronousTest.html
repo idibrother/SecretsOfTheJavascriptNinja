@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>간단한 비동기 테스트 스위트</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            (function () {
+                var queue = [], paused = false;
+
+                // 테스트 큐에 비동기 테스트 함수를 추가하고
+                this.test = function (fn) {
+                    queue.push(fn);
+                    // 미동기 테스트 함수를 실행
+                    runTest();
+                };
+
+                this.pause = function () {
+                    paused = true;
+                }
+
+                this.resume = function () {
+                    paused = false;
+                    setTimeout(runTest, 1);
+                }
+
+                function runTest() {
+                    // 실행 중인 테스트 존재 여부 확인 후
+                    if (!paused && queue.length) {
+                        // 실행 중인 테스트가 없으면, 큐에서 빼내서 실행한다.
+                        queue.shift()();
+                        // 실행 중 테스트 함수 내부적으로 paused를 set 하고,
+                        // 완료 후에 resume을 실행해서 다음 테스트를 실행하도록 할 것이다.
+                        if (!paused) {
+                            resume();
+                        }
+                    }
+                }
+            })();
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="box">Hello!</div>
+</body>
+</html>
