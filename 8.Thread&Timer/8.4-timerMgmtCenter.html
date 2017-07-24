@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>다수의 핸들러 함수를 관리하는 중앙 타이머</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            var timers = {
+                timerId: 0,
+                timers: [],
+
+                add: function (fn) {
+                    this.timers.push(fn);
+                },
+
+                start: function () {
+                    // timerId를 확인해서 실행중인 타이머가 없으면
+                    if (this.timerId) return;
+                    // 즉시 실행 함수의 형태를 이용해서
+                    (function runNext() {
+                        // 추가된 타이머들을 실행한다.
+                        if (timers.timers.length > 0) {
+                            for (var i = 0; i < timers.timers.length; i++) {
+                                // 실행이 완료된 핸들러는 중앙 타이머에서 제거한다.
+                                if (timers.timers[i]() === false) {
+                                    timers.timers.splice(i, 1);
+                                    i--;
+                                }
+                            }
+                            // 각 타이머가 모두 완료될 때 까지 반복해서 실행한다.
+                            timers.timerId = setTimeout(runNext, 0);
+                        }
+                    })();
+                },
+
+                stop: function () {
+                    clearTimeout(this.timerId);
+                    this.timerId = 0;
+                }
+            };
+
+            var box = document.getElementById("box"), x = 0, y = 20;
+
+            box.style.position = "absolute";
+
+            // 하나의 타이머에 두 개의 함수를 추가했다.
+            timers.add(function () {
+                box.style.left = x + "px";
+                if (++x > 50) {
+                    return false;
+                }
+            });
+
+            timers.add(function () {
+                box.style.top = y + "px";
+                y += 2;
+                if (y > 120) {
+                    return false;
+                }
+            });
+
+            timers.start();
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div id="box">Hello!</div>
+</body>
+</html>
