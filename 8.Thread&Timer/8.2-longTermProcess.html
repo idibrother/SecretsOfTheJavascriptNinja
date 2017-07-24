@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>긴 시간 동안 실행되는 작업의 예</title>
+    <script type="text/javascript">
+
+
+        window.onload = function () {
+            var tbody = document.getElementsByTagName("tbody")[0];
+
+            // 아래의 반복문은 브라우저 화면을 그리는 작업을 방해 할 것이다.
+            // 실제 실행 해 봤을 때 tr 및 td가 아래의 모든 반복문이 다 실행 된 후에 화면에 그려주는 작업이 실행되었다.
+            // 모든 작업을 적절한 크기로 나눠서 실행 하면 실행 중간 내용으로 화면에 그리기가 가능하다.
+            // 그래서 다음 예제를 통해 나눠볼 것이다.
+            for (var i = 0; i < 20000; i++) {
+                var tr = document.createElement("tr");
+                for (var t = 0; t < 6; t++) {
+                    var td = document.createElement("td");
+                    td.appendChild(document.createTextNode(i + ", " + t));
+                    tr.appendChild(td);
+                }
+
+                tbody.appendChild(tr);
+            }
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<table>
+    <tbody></tbody>
+</table>
+</body>
+</html>
