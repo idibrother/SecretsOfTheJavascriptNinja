@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>타이머를 이용해서 긴 작업을 나누기</title>
+    <script type="text/javascript">
+
+        var rowCount = 20000;
+        var divideInto = 4;
+        var chunkSize = rowCount / divideInto;
+        var iteration = 0;
+
+
+        window.onload = function () {
+            var table = document.getElementsByTagName("tbody")[0];
+            setTimeout(function generateRows() {
+                // 매 이터레이션의 초기 위치를 설정하고,
+                var base = (chunkSize) * iteration;
+
+                // 첫 번 째 조각 부터
+                for (var i = 0; i < chunkSize; i++) {
+                    // tr 하나 당 td 6개 씩 추가하고,
+                    var tr = document.createElement("tr");
+                    for (var t = 0; t < 6; t++) {
+                        var td = document.createElement("td");
+                        td.appendChild(document.createTextNode(( i + base) + ", " + t + ", " + iteration));
+                        tr.appendChild(td);
+                    }
+                    // table에 tr을 추가한다.
+                    table.appendChild(tr);
+                }
+                // 매 이터레이션을 구분하기 위해 tr 하나를 추가한다.
+                // 전체 rowCount를 4로 나눴으므로 5000개가 하나의 이터레이션에 할당될 것이다.
+                console.log("i : " + iteration + ", base : " + base);
+                iteration++;
+
+                // iteration 미만이면 다음 이터레이션을 실행한다.
+                // 그 사이에 이터레이션 실행 중 발생한 이벤트가 큐에 쌓이고 다음 이터레이션을 실행 하기 전에 먼저 실행된다.
+                if (iteration < divideInto) {
+                    setTimeout(generateRows, 0);
+                }
+            }, 0);
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<table>
+    <tbody></tbody>
+</table>
+</body>
+</html>
