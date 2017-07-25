@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>어떤 함수의 인자를 찾는 함수</title>
+    <script type="text/javascript">
+
+        function argumentNames (fn) {
+            // function 문자열 앞에 공백 또는 여는 괄호 0개 이상이고, function 문자열 뒤에 여는 괄호가 아닌 문자열 0개 이상,
+            // 여는 괄호 하나와 공백 0개 이상, 닫는 괄호가 아닌 문자열이 0개 이상 있거나 없거나, 공백 0개 이상과 닫는괄호
+            // 여는 괄호 뒤으 문자열은부터 공백 0개 이상과 닫는 괄호 사이의 무자열을 캡처하고
+            var found = /^[\s\(]*function[^(]*\(\s*([^)]*?)\s*\)/.exec(fn.toString());
+
+            // 캡처 내용을 콤마(,)와 공백 0개 이상으로 분리
+            return found && found[1] ? found[1].split(/,\s*/) : [];
+        }
+
+        window.onload = function () {
+            assert(argumentNames(function () {}).length === 0, "인자가 없는 함수에 대해서 잘 동작한다.");
+
+            assert(argumentNames(function (x) {})[0] === 'x', "인자가 하나 있는 함수에 대해서 잘 동작힌다.");
+
+            var results = argumentNames(function(a, b, c, d, e){});
+
+            assert(results[0] === 'a' &&
+                results[1] === 'b' &&
+                results[2] === 'c' &&
+                results[3] === 'd' &&
+                results[4] === 'e', "여러 인자를 가진 함수에 대해서도 잘 동작한다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
