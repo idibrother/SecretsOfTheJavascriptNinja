@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>함수를 문자열로 디컴파일 하기</title>
+    <script type="text/javascript">
+
+        function test(a) {
+            return a + a;
+        }
+
+
+
+        window.onload = function () {
+            // toString 함수를 사용하여 디컴파일 하였다.
+            // 디컴파일 결과와 비교를 위해 줄바꿈과 공백을 일치시켜야 함
+            console.log(test.toString());
+            assert(test.toString() === "function test(a) {\n            return a + a;\n        }", "함수가 디컴파일되었다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
