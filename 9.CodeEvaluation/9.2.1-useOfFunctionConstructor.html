@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Function 함수를 이용해서 함수 인스턴스 생성하기</title>
+    <script type="text/javascript">
+
+        // 아래 문장은 var add = function(a, b) {return a + b;} 와 같은 효과를 가진다.
+        // 다만, 차이점은 Function method로 생성한 함수 인스턴스는 클로저를 가지지 않는다고 한다.
+        var add = new Function ("a", "b", "return a + b;");
+
+        window.onload = function () {
+            assert(add(3, 4) === 7, "함수가 생성되었고 잘 동작한다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
