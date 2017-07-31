@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shortcutForOtherReference</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            new Test.Unit.Runner({
+                testSliderBasics: function () {with(this) {
+                    var slider = new Control.Slider('handle1', 'track1');
+                    // this.assertInstanceOf와 같이 사용 할 수 있지만 with를 사용하면 간결해짐
+                    assertInstanceOf(Control.Slider, slider);
+                    assertEqual('horizontal', slider.axis);
+                    assertEqual(false, slider.disabled);
+                    assertEqual(0, slider.value);
+                    slider.dispose();
+                }},
+                //...
+            });
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
