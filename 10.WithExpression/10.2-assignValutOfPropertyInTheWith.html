@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>객체를 이용해서 with 유효범위 만들기</title>
+    <script type="text/javascript">
+
+        var katana = {
+            isSharp : true,
+            use: function () {
+                this.isSharp = !this.isSharp;
+
+            }
+        };
+
+        window.onload = function () {
+            with(katana) {
+
+                // 이렇게 with문에 지정한 객체의 프로퍼티를 수정 할 수 있다.
+                isSharp = false;
+
+                assert(katana.isSharp === false, "프로퍼티에 값을 할당 할 수 있다.");
+
+                cut = function () {
+                    isSharp = false;
+                }
+
+                // 하지만 없는 프로퍼티를 추가 할 수는 없다.
+                assert(typeof katana.cut == "function", "새로운 프로퍼티를 with문에 지정된 객체에 추가 할 수 있다.");
+                // 그래서, cut 함수는 window 콘텍스트에 추가된다.
+                assert(typeof window.cut == "function", "새로운 프로퍼티는 전역 유효범위 내에 생성된다.");
+            }
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
