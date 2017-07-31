@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>shortcutForOtherReference</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            // with를 사용하지 않은 경우
+            YAHOO.util.Event.on(
+                [YAHOO.util.Dom.get('item'), YAHOO.util.Dom.get('otheritem')],
+                'click', function () {
+                    YAHOO.util.Dom.setStyle(this, 'color', '#c00');
+                }
+            );
+
+            // with를 사용한 경우
+            with(YAHOO.util.Dom) {
+                YAHOO.util.Event.on(
+                    [get('item'), get('otheritem')],
+                    'click', function () {
+                        setStyle(this, 'color', '#c00');
+                    }
+                )
+            };
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
