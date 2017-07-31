@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>with를 이요한 템플릿 시스템 구현</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            (function () {
+                var cache = {};
+
+                this.tmpl = function tmpl(str, data) {
+                    var template = str
+                        .replace(/[\r\t\n]/g, " ")
+                        .split("<%").join("\t")
+                        .replace(/((^|%>)[^\t]*)'/g, "$1\r")
+                        .replace(/\t=(.*?)%>/g, "',$1,'")
+                        .split("\t").join("');")
+                        .split("%>").join("p.push('")
+                        .split("\r").join("\\'");
+
+                    // with문을 사용하여 생성한 함수 내부의 with 블럭에서 최상위 변수인 것 처럼 참조한다.
+                    var f = new Function ("obj",
+                    "var p=[];" +
+                    "with(obj){p.push('" + template + "');}return p.join('');");
+
+                    var testResult = /\W/.test(str);
+
+                    var fn = !testResult ?
+                        cache[str] = cache[str] || tmpl(document.getElementById(str).innerHTML) : f;
+
+                    // 템플릿에서 사용 할 객체 데이터가 있을 경우 실행 결과를 문자열로 리턴하고,
+                    // 객체 데이터가 없을 경우 함수를 리턴한다.
+                    // 나중에 참조할 데이터를 전달해서 호출 하는 방식으로 동작한다.
+                    return data ? fn(data) : fn;
+                };
+            })();
+
+            // 두 번 째 매개변수를 템플릿으로 맵핑한다.
+            assert(tmpl("Hello, <%= name %>!", {name: "world"}) == "Hello, world!", "간단한 변수 사용을 지원한다.");
+
+            var hello = tmpl("Hello, <%= name %>!");
+            assert( hello({name: "world"}) == "Hello, world!", "미리 컴파일된 결과를 사용한다.");
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
