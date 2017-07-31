@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>with문의 성능 테스트</title>
+    <script type="text/javascript">
+
+        var ninja = {foo:"bar"},
+            value,
+            maxCount = 1000000,
+            n,
+            start,
+            elapsed;
+
+        window.onload = function () {
+            start = new Date().getTime();
+
+            for (n = 0; n < maxCount; n++) {
+                value = ninja.foo;
+            }
+
+            // with를 사용하지 않을 경우 전역 프로퍼티에 대한 값 업데이트를 100만번 실행 결과
+            elapsed = new Date().getTime() - start;
+            assert(true, "with 미사용: " + elapsed);
+
+            start = new Date().getTime();
+            with(ninja) {
+                for (n = 0; n < maxCount; n++) {
+                    value = foo;
+                }
+            }
+
+            // with를 사용 했을 경우 전역 프로퍼티에 대한 값 업데이트를 100만 번 실행 결과
+            elapsed = new Date().getTime() - start;
+            assert(true, "with 사용 : " + elapsed);
+
+            start = new Date().getTime();
+            with(ninja) {
+                for (n = 0; n < maxCount; n++) {
+                    foo = n;
+                }
+            }
+            // 프로퍼티 값을 수정 하는 문장을 100만번 실행 결과
+            elapsed = new Date().getTime() - start;
+            assert(true, "with 사용해서 프로퍼티 값을 수정 : " + elapsed);
+
+            start = new Date().getTime();
+            with(ninja) {
+                for (n = 0; n < maxCount; n++) {
+                    value = "no test";
+                }
+            }
+            // 프로퍼티 접근하지 않고, 전역 변수를 100만번 수정하는 경우
+            elapsed = new Date().getTime() - start;
+            assert(true, "with안에서 프로퍼티 접근 없음 : " + elapsed);
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
