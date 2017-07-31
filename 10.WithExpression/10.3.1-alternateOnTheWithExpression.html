@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>with문 대안</title>
+    <script type="text/javascript">
+
+        // 아래 예제는 Prototype 라이브러리를 참조 한 것이다.
+        Object.extend(String.prototype.escapeHTML, {
+            div: document.createElement('div'),
+            text : document.createTextNode('')
+        });
+
+        window.onload = function () {
+
+            var start, elapsed;
+
+            // 아래의 with문은
+            with(String.prototype.escapeHTML) {
+                div.appendChild(text);
+            }
+
+            // 아래의 즉시실행 함수 형태로 사용해서 대체 할 수 있다.
+            (function (s) {
+                s.div.appendChild(s.text);
+            })(String.prototype.escapeHTML);
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
