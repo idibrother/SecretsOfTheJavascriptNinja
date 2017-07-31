@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>객체를 이용해서 with 유효범위 만들기</title>
+    <script type="text/javascript">
+
+        var use = "other";
+
+        var katana = {
+            isSharp : true,
+            use: function () {
+                this.isSharp = !this.isSharp;
+            }
+        };
+
+        window.onload = function () {
+            with(katana) {
+                // use는 katana의 프로퍼티지만 katana.use가 아니라 use로 참조 할 수 있다.
+                assert(use !== "other" && typeof use == "function", "use는 katana의 함수다.");
+
+                // 콘텍스트는 변함 없다. this는 아마 window 일 것이다.
+                console.log(this);
+                assert(this !== katana, "콘텍스트는 변경되지 않고 원래 값을 유지한다.");
+            }
+
+            // with문 바깥에 있는 use는 영향을 받지 않는다.
+            assert(use == "other", "with 바깥에 있는 use는 영향을 받지 않았다.");
+
+            // with문 바깥에서는(즉, window에서는) isSharp를 참조 할 수 없다.
+            assert(typeof isSharp === "undefined", "with 바깥에서는 with문 내에서 사용했던 프로퍼티가 존재하지 않는다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+</body>
+</html>
