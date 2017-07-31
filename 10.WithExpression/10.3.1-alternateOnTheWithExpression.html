@@ -15,15 +15,43 @@
 
             var start, elapsed;
 
-            // 아래의 with문은
+            // 1. with문을 즉시실행 함수 형태로 대체해서 사용
             with(String.prototype.escapeHTML) {
                 div.appendChild(text);
             }
 
-            // 아래의 즉시실행 함수 형태로 사용해서 대체 할 수 있다.
             (function (s) {
                 s.div.appendChild(s.text);
             })(String.prototype.escapeHTML);
+
+
+            // 2. 인스턴스 프로퍼티로 간단히 접근
+            var Rect = Base.extend({
+
+                constructor: function (left, top, width, height) {
+                    this.left = left;
+                    this.top = top;
+                    this.width = width;
+                    this.height = height;
+                },
+
+                contains : function (x, y) {
+                    with(this) {
+                        // with를 써서 내부 프로퍼티에 간단하게 접근 1
+                        return x >= left && x <= right && y >= top && y <= bottom;
+                    }
+                },
+
+                toString: function () {
+                    // with를 써서 내부 프로퍼티에 간단하게 접근 2
+                    with(this) return [left, top, width, height].join(",");
+                }
+            });
+
+            // 3. 파이어폭스용 개발자 확장 도구 내부 구성
+            const evalScriptPre = "with(__scope__.vars){with (__scope__.api){" +
+                " with(__scope__.userVars){ with(window){";
+            const evalScriptPost = "}}}}";
         }
 
         function assert (value, desc) {
