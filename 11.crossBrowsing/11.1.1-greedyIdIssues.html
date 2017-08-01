@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>greedy id란?</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var form = document.getElementById("form");
+            var what = form.action;
+
+            // 우리는 form 엘리먼트의 action 프로퍼티를 /cancel로 설정했으므로 그럴 것이다로 예상 했지만...
+            assert(what == "/cancel", "form 엘리먼트의 action 프로퍼티는 /cancel이다.");
+
+            // 실제는 greedy id 현상으로 인해 input 엘리먼트(id가 action인)에 대한 참조가 되었다.
+            console.log(what);
+
+            // greedy id 현상과는 별개로 input 엘리먼트를 제거하고 확인해보니 action 프로퍼티에 접근하면 도메인을 포함한 절대 값이 참조되었다.
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<form id="form" action="/cancel">
+    <input type="text" id="action" />
+    <input type="text" id="submit" />
+</form>
+</body>
+</html>
