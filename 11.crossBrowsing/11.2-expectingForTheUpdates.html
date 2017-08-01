@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>다가올 API 변경에 대비하기</title>
+    <script type="text/javascript">
+
+        function bindEvent(element, type, handle) {
+            // 언젠가는 익스플로러 9이 표준 API를 사용 할 것이라는 가정하에 아래와 같이 작성
+            if (element.addEventListener) {
+                // 표준 API의 활용
+                element.addEventListener(type, handle, false);
+            } else if (element.attatchEvent) {
+                // 익스플로러 9 전용 API 활용
+                element.attatchEvent("on" + type, handle);
+            }
+        }
+
+        window.onload = function () {
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<form id="form" action="/cancel">
+    <input type="text" id="action" />
+    <input type="text" id="submit" />
+</form>
+</body>
+</html>
