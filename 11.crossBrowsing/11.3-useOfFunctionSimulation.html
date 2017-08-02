@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>브라우저 버그를 우회하기 위해 기능 시뮬레이션 사용하기</title>
+    <script type="text/javascript">
+
+
+        window.onload = function () {
+            function getAllElements() {
+                if (!window.findByTagWorksAsExpected) {
+                    // div.getElementsByTagName("*") 문장이 제대로 동작하는지 기능 테스트 후 동작 완료 여부를 findByTagWorkAsExpected 프로퍼티에 할당한다.
+                    window.findByTagWorksAsExpected = (function () {
+                        var div = document.createElement("div");
+                        div.appendChild(document.createComment("test"));
+                        // comment는 엘리먼트 노드가 아니므로 div 하위에서 모든 엘리먼트 노드를 조회 했을 때 0을 리턴해야 한다.
+                        return div.getElementsByTagName("*").length === 0;
+                    })();
+                }
+
+                var allElements = document.getElementsByTagName("*");
+
+                // 위 즉시 실행함수 부분 실행 결과가 false이면
+                if (!window.findByTagWorksAsExpected) {
+                    // comment를 엘리먼트로 인식 하였으므로, 실제 노드 타입을 확인해서 엘리먼트 노드만 다시 추출한다.
+                    for (var n = allElements.length - 1; n >= 0; n--) {
+                        if (allElements[n].nodeType === 1) {
+                            allElements.splice(n, 1);
+                        }
+                    }
+                }
+
+                return allElements;
+            }
+
+            var elements = getAllElements();
+            var elementCount = elements.length;
+
+            for (var n = 0; n < elementCount; n++) {
+                // 조회 한 모든 노드의 타입이 엘리먼트 인지 확인한다.
+                assert(elements[n].nodeType === 1, "엘리먼트 노드다.");
+            }
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<div><!-- comment #1 --></div>
+<div><!-- comment #2 --></div>
+<ul id="results">
+
+</ul>
+<form id="form" action="/cancel">
+    <input type="text" id="action" />
+    <input type="text" id="submit" />
+</form>
+</body>
+</html>
