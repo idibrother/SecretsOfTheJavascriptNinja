@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>URL 자동 정규화 이슈</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+
+            var link = document.getElementsByTagName('a')[0];
+
+            var linkHref = link.getAttributeNode('href').nodeValue;
+
+            assert(linkHref === '12.5-urlNormalization.html', "노드에서 얻은 링크값은 문제 없음");
+
+            // 정규화 되는 문제가 있음
+            assert(link.href === '12.5-urlNormalization.html', "link의 href 프로퍼티에는 문제 없음");
+
+            // IE 구버전을 제외한 모든 브라우저에서는 문제가 없음
+            assert(link.getAttribute('href') == "12.5-urlNormalization.html", "link의 href 속성에는 문제 없음");
+
+            assert(link.getAttribute('href', 2) == "12.5-urlNormalization.html", "link의 DOM 속성 함수의 두 번째 인자로 2를 같이 전달하면 IE 구버전에도 문제 없음");
+
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<a href="12.5-urlNormalization.html"></a>
+</body>
+</html>
