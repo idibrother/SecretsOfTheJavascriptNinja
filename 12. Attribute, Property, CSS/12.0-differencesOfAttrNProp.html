@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>속성과 프로퍼티의 차이</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var image = document.getElementsByTagName('img')[0];
+            var newSrc = './Luffy-One-Piece_1.png';
+            image.src = newSrc;
+
+            // src 프로퍼티를 참조한다.
+            assert(image.src === newSrc, "이제 이미지의 출처는 " + image.src + '이다.');
+
+            // src 속성값을 참조한다.
+            assert(image.getAttribute('src') === './Luffy-One-Piece.png', '이미지의 src 속성은 ' + image.getAttribute('src') + '이다.')
+
+            // 위 예제에서 우리는 src 프로퍼티를 변경했다.
+            // 그래서 src 속성값은 최초 지정한 './Luffy-One-Piece.png'일 것이라고 예상했지만 결과는 './Luffy-One-Piece_1.png'이었다.
+            // 프로퍼티 변경을 하면 속성값도 변경이 되는 모양이다.
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<img src="./Luffy-One-Piece.png">
+
+</body>
+</html>
