@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>문서에 input 엘리먼트를 삽입한 후에 type 속성 변경하기</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var input = document.createElement('input');
+
+            input.type = "text";
+            assert(input.type == "text", "Input의 Type은 text이다.");
+
+            var form = document.getElementById('testForm');
+            form.appendChild(input);
+
+            // 최신 브라우저에서는 대부분 아래의 구문이 잘 동작하지만 IE 구버전에서는 예외가 발생한다고 한다.
+            input.type = "hidden";
+            assert(input.type == "hidden", "Input의 Type은 hidden이다.");
+
+            /**
+             * 이러한 제약의 해결방법은 2 가지가 있다고 한다.
+             * 1. 새로운 input 엘리먼트를 만들어서 원본의 모든 프로퍼티와 속성을 복사 후 교체(이벤트 핸들러 존재 유무 파악이 안됨, 원본 엘리먼트의 모든 참조가 무효화됨)
+             * 2. 모든 브라우저에 대해서 type 속성 변경 시도를 차단(그래서 jQuery에서는 이 방법을 채택했다고 함)
+              */
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<form id="testForm" action="/"></form>
+</body>
+</html>
