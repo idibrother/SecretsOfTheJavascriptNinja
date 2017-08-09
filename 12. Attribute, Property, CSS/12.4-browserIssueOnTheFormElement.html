@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var form = document.getElementsByTagName('form')[0];
+
+            assert(form.id == "testForm", "id 프로퍼티는 원래 값이다.");
+
+            assert(form.action == "/", "action 프로퍼티도 원래 값이다.");
+
+            // 크롬에서는 아래와 같이 DOM 속성 메서드로 원본 값에 접근이 가능하지만, IE에서는 안된다고 한다.
+            assert(form.getAttribute('id') == "testForm", "id 속성값은 그대로이다.");
+
+            assert(form.getAttribute('action') == "/", "action 속성값도 그대로이다.");
+
+            // 그래서 원본에 접근하기 위해 아래와 같이 해줘야 한다고 한다.
+            assert(form.getAttributeNode("id").nodeValue == "testForm", "id 원본 속성값에 접근하는 또다른 방식이다.");
+
+            assert(form.getAttributeNode("action").nodeValue == "/", "action 원본 속성값에 접근하는 또다른 방식이다.");
+        }
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<form id="testForm" action="/">
+    <input type="text" id="id"/>
+    <input type="text" name="action"/>
+</form>
+</body>
+</html>
