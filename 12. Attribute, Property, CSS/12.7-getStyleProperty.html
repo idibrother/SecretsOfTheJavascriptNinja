@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>style 프로퍼티 알아보기</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var div = document.getElementsByTagName("div")[0];
+
+            // 아래 스타일은 마크업의 속성에 지정한 값만 볼 수 있다.
+            assert(div.style.color == 'rgb(0, 0, 0)' || div.style.color == '#000', "color 값이 적용되어 있음");
+
+            // 아래 두 개의 스타일은 외부 스타일 엘리먼트에서 설정한 것이고, 프로퍼티로 참조 할 수 없었다.
+            (function() {
+                assert(div.style.fontSize == '1.8em', "fontSize 값이 설정되어 있음" );
+
+                assert(div.style.borderWidth == '0', "borderWidth 값이 설정되어 있음");
+            }
+            )();
+
+            // 아래와 같이 직접 프로퍼티 설정을 하고 값을 확인하면 참조 할 수 있다.
+            div.style.borderWidth = "4px";
+
+            assert(div.style.borderWidth == '4px', "borderWidth 값이 변경됨");
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+        div { font-size: 1.8em; border: 0 solid gold;}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div style="color:#000;" title="Ninja Power!">
+    닌자파워
+</div>
+</body>
+</html>
