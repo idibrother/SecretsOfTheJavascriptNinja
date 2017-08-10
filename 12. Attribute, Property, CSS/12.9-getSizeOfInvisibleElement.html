@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>보이지 않는 엘리먼트의 크기 알아내기</title>
+    <script type="text/javascript">
+
+        (function () {
+            var PROPERTIES = {
+                position: "absolute",
+                visibility: "hidden",
+                display: "block"
+            }
+
+            window.getDimension = function (element) {
+                // 이전 속성값을 담을 객체 생성
+                var previous = {};
+                for (var key in PROPERTIES) {
+                    previous[key] = element.style[key];
+                    element.style[key] = PROPERTIES[key];
+                }
+
+                // 원본 크기를 담은 객체를 정의하고,
+                var result = {
+                    width: element.offsetWidth,
+                    height: element.offsetHeight
+                };
+
+                // 이전 속성값으로 원복한다.
+                for (key in PROPERTIES) {
+                    element.style[key] = previous[key];
+                }
+
+                return result;
+            };
+        })();
+
+        window.onload = function () {
+            setTimeout(function () {
+                var withShuriken = document.getElementById('withShuriken');
+                // 원본 이미지의 크기를 가져오는 프로퍼티는 offsetHeight와 offsetWidth이지만, display style 속성값이 none이라 값을 가져 올 수 없었다.
+                assert(withShuriken.offsetHeight == 720, "withShuriken의 실제 크기는 " + withShuriken.offsetHeight + "이고 기대 값은 720이다.");
+
+                // 대안으로 1. display style 속성값을 block으로 변경 2. visibility를 hidden으로 변경 3. position을 absolute로 변경 4. 크기 값을 획득 5. 변경한 프로퍼티들을 원복
+                var dimension = getDimension(withShuriken);
+                assert(dimension.height == 720, "withShuriken의 실제 크기는 " + dimension.height + "이고 기대 값은 720이다.");
+            }, 3000);
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div>
+    <img id="withShuriken" src="./Luffy-One-Piece.png" style="display:none" />
+</div>
+</body>
+</html>
