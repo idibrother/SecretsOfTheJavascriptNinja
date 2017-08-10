@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>평가된 스타일 값 가져오기</title>
+    <script type="text/javascript">
+
+        function fetchComputedStyle(element, property) {
+            if (window.getComputedStyle) {
+                // 브라우저가 getComputedStyle을 지원하는 경우 사용해서 평가된 스타일 정보를 가져오고
+                var computedStyles = window.getComputedStyle(element);
+
+                if (computedStyles) {
+                    // 프로퍼티가 낙타표기법일 경우 모든 대문자 앞에 '-'를 추가하고 소문자로 변경한다.
+                    var replace = property.replace(/([A-Z])/g, '-$1');
+                    property = replace.toLowerCase();
+                    // 그리고 평가된 스타일 목록에서 프로퍼티 값을 가져온다.
+                    return computedStyles.getPropertyValue(property);
+                }
+            } else if (element.currentStyle) { // getComputedStyle을 지원하지 않을 경우
+                // 프로퍼티가 하이픈(-)으로 연결된 문자열을 낙다표기법으로 변경한다.
+                property.replace(
+                    /-([a-z])/ig, function (all, letter) {
+                        return letter.toUpperCase();
+                    });
+                // 그리고 currentStyle 프로퍼티를 활용해서 property의 값을 가져온다.
+                // currentStyle은 비표준 방식으로 평가된 스타일을 가져오는 것 같다.
+                return element.currentStyle[property];
+            }
+        }
+
+        window.onload = function () {
+
+            var div = document.getElementById('testSubject');
+
+            assert(true, "background-color: " + fetchComputedStyle(div, 'background-color'));
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style type="text/css">
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+        div {
+            background-color: #ffc; display: inline; font-size: 1.8em;
+            border: 1px solid crimson; color: green;
+        }
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div style="color:crimson;" id="testSubject" title="Ninja Power!">
+    닌자 파워
+</div>
+</body>
+</html>
