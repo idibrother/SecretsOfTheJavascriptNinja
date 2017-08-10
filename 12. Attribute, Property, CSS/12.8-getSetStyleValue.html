@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>스타일 값을 얻고 설정하는 간단한 메서드</title>
+    <script type="text/javascript">
+
+        function style(element, name, value) {
+            // CSS 속성 이름은 하이픈(-)으로 구분된 하나 이상의 단어로 구성되어 있다고 한다.
+            // 하지만, CSS 스타일 프로퍼티 이름은 낙타 표기법으로 되어 있기 때문에 프로퍼티로 접근하기 위해  하이픈으로 구분된 단어를 변환한다.
+            name = name.replace(/-([a-z])/, function (all, letter) {
+                return letter.toUpperCase();
+            });
+
+            if (typeof value != 'undefined') {
+                element.style[name] = value;
+            }
+
+            // 그리고 변환된 낙타표기법으로 변환 후 프로퍼티로 접근한다.
+            return element.style[name];
+        }
+
+        window.onload = function () {
+            var div = document.getElementsByTagName('div')[0];
+
+            assert(true, style(div, div.style[1]));
+            assert(true, style(div, div.style[2]));
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+        div { font-size: 1.8em; border: 0 solid gold;}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div style="color:red; font-size:10px; background-color:#eee;">
+</div>
+</body>
+</html>
