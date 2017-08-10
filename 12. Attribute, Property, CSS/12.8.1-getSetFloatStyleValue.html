@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>float 스타일을 고려한 스타일 값을 얻고 설정하는 간단한 메서드</title>
+    <script type="text/javascript">
+
+        // 속성 이름으로 프로퍼티를 추출하는 함수인데
+        function style(element, name, value) {
+            name = name.replace(/-([a-z])/, function (all, letter) {
+                return letter.toUpperCase();
+            });
+
+            if (typeof value != 'undefined') {
+                element.style[name] = value;
+            }
+
+            // IE 구버전에서는 cssFloat이 아니고 styleFloat을 프로퍼티 이름으로 사용한다고 한다.
+            // 그래서 이벤트 핸들러 추가하는 함수 프로퍼티를 확인하고 cssFloat일 경우 styleFloat으로 변환하는 코드를 추가했다.
+            if (element.attachEvent && name == 'cssFloat') {
+                name = 'styleFloat';
+            }
+
+            // 그리고 변환된 낙타표기법으로 변환 후 프로퍼티로 접근한다.
+            return element.style[name];
+        }
+
+        window.onload = function () {
+            var div = document.getElementsByTagName('div')[0];
+
+            assert(true, style(div, 'font-size'));
+            assert(true, style(div, 'background-color'));
+            assert(true, style(div, 'css-float'));
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div style="color:red; font-size:10px; background-color:#eee;">
+</div>
+</body>
+</html>
