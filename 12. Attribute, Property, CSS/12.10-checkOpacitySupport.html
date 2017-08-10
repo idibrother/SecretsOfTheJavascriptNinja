@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>브라우저가 opacity를 지원하는지 여부를 판단한다.</title>
+    <script type="text/javascript">
+
+        window.onload = function () {
+            var div = document.createElement("div");
+            div.setAttribute('style', 'opacity:.5');
+            var OPACITY_SUPPORTED = div.style.opacity === "0.5";
+
+            // 최신 브라우저에서는 opacity 프로퍼티를 지원하지만 IE 7은 지원하지 않는다고 한다.
+            assert(OPACITY_SUPPORTED, "Opacity를 지원한다.");
+        };
+
+        function assert (value, desc) {
+            var li = document.createElement("li");
+            li.className = value ? "pass" : "fail";
+            li.appendChild(document.createTextNode(desc));
+            document.getElementById("results").appendChild(li);
+        }
+    </script>
+    <style>
+        #results li.pass {color:green}
+        #results li.fail {color:red}
+    </style>
+</head>
+<body>
+<ul id="results">
+
+</ul>
+<div>
+    <img id="withShuriken" src="./Luffy-One-Piece.png" style="display:none" />
+</div>
+</body>
+</html>
