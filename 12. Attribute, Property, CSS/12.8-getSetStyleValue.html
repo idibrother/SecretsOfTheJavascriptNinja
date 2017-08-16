@@ -23,8 +23,9 @@
         window.onload = function () {
             var div = document.getElementsByTagName('div')[0];
 
-            assert(true, style(div, div.style[1]));
-            assert(true, style(div, div.style[2]));
+            assert(true, style(div, 'font-size'));
+
+            assert(true, style(div, 'background-color'));
         };
 
         function assert (value, desc) {

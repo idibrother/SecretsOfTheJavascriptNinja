@@ -12,7 +12,9 @@
 
                 if (computedStyles) {
                     // 프로퍼티가 낙타표기법일 경우 모든 대문자 앞에 '-'를 추가하고 소문자로 변경한다.
+                    // backgroundColor -> background-Color
                     var replace = property.replace(/([A-Z])/g, '-$1');
+                    // background-Color -> background-color
                     property = replace.toLowerCase();
                     // 그리고 평가된 스타일 목록에서 프로퍼티 값을 가져온다.
                     return computedStyles.getPropertyValue(property);

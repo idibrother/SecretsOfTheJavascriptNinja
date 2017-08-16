@@ -7,6 +7,7 @@
 
         // 속성 이름으로 프로퍼티를 추출하는 함수인데
         function style(element, name, value) {
+            // font-size -> -size(all), s(letter) -> -s>S
             name = name.replace(/-([a-z])/, function (all, letter) {
                 return letter.toUpperCase();
             });
